@@ -15,7 +15,7 @@ And it plays really nicely with Matrix!
 Field settings allow you to:
 
 * Configure what elements each field can link too.
-* Set which entry/asset sources are avaiable to each field.
+* Set which entry/asset sources are available to each field.
 * Allow fields to set custom link text.
 * Allow fields to set links to open in new window.
 
@@ -105,7 +105,7 @@ Each link returns a link object which contains the following:
 * Force download option
 * Link to categories
 * Rework the way link data is returned
-* Improve handling of target stuff - if its required
+* Improve handling of target stuff - if it's required
 
 
 ## Changelog
