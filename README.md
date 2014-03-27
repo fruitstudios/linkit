@@ -10,14 +10,16 @@ This plugin adds a fieldtype which links to all sorts of stuff, Linkit can curre
 * Phone numbers
 * Custom URLs
 
-Additionally you can:
-
-* Configure which each elements each field can link too.
-* Set which entry/asset sources are avaiable to each field.
-* Optionally set your own custom link text.
-* Optionally set links to open in new window.
-
 And it plays really nicely with Matrix!
+
+Field settings allow you to:
+
+* Configure what elements each field can link too.
+* Set which entry/asset sources are avaiable to each field.
+* Allow fields to set custom link text.
+* Allow fields to set links to open in new window.
+
+
 
 ## Installation
 
