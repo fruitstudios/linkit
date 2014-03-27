@@ -1,0 +1,94 @@
+{% import "_includes/forms" as forms %}
+
+{% set type = value.type is defined and value.type ? value.type : null %}
+
+<div class="linkit">
+
+	<input type="hidden" name="{{ name }}" value="" />
+	
+	<div class="linkit-type">
+	{{ forms.selectField({
+		id: name~'-Type',
+		class: name~'-Type',
+		name: name~'[type]',
+		options: types,
+		value: type is defined ? type
+	}) }}
+	</div>
+	
+	<div class="linkit-options{{ type is not defined or type == '' ? ' hidden' }}">
+	
+		{% if types.email is defined %}
+		<div class="linkit-type-option linkit-email{{ type != 'email' ? ' hidden' }}">
+			{{ forms.textField({
+				id: name~'Email',
+				class: name~'Email',
+				name: name~'[email]',
+				placeholder: 'Email Address',
+				value: value.email is defined ? value.email
+			}) }}
+		</div>
+		{% endif %}
+		
+		{% if types.tel is defined %}
+		<div class="linkit-type-option linkit-tel{{ type != 'tel' ? ' hidden' }}">
+			{{ forms.textField({
+				id: name~'Tel',
+				class: name~'Tel',
+				name: name~'[tel]',
+				placeholder: 'Telephone Number',
+				value: value.tel is defined ? value.tel
+			}) }}
+		</div>
+		{% endif %}
+		
+		{% if types.custom is defined %}
+		<div class="linkit-type-option linkit-custom{{ type != 'custom' ? ' hidden' }}">
+			{{ forms.textField({
+				id: name~'Custom',
+				class: name~'Custom',
+				name: name~'[custom]',
+				placeholder: 'Custom URL',
+				value: value.custom is defined ? value.custom
+			}) }}
+		</div>
+		{% endif %}
+			
+		{% if types.entry is defined %}
+		<div class="linkit-type-option linkit-entry{{ type != 'entry' ? ' hidden' }}">
+			{% include "linkit/_fieldtype/inputs/entry" with entryVariables only %}
+		</div>
+		{% endif %}
+		
+		{% if types.asset is defined %}
+		<div class="linkit-type-option linkit-asset{{ type != 'asset' ? ' hidden' }}">
+			{% include "linkit/_fieldtype/inputs/asset" with assetVariables only %}
+		</div>
+		{% endif %}
+	
+		{% if settings.text %}
+		<div class="linkit-text">
+			{{ forms.textField({
+				id: name~'Text',
+				class: name~'Text',
+				name: name~'[text]',
+				placeholder: 'Custom Link Text',
+				value: value.text is defined ? value.text
+			}) }}
+		</div>
+		{% endif %}
+		
+		{% if settings.target %}
+		<div class="linkit-target">
+			{{ forms.checkboxField({
+				id: name~'Target',
+				class: name~'Target',
+				name: name~'[target]',
+				label: 'Open link in new window?',
+				checked: value.target is defined ? value.target
+			}) }}
+		</div>
+		{% endif %}
+	</div>
+	
+</div>

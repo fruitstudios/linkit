@@ -1,0 +1,57 @@
+{% import "_includes/forms" as forms %}
+
+
+{{ forms.checkboxField({
+	label: "Allow custom link text"|t,
+	name: 'text',
+	checked: settings.text
+}) }}
+
+{{ forms.checkboxField({
+	label: "Allow open in new window"|t,
+	name: 'target',
+	checked: settings.target
+}) }}
+
+{{ forms.checkboxSelectField({
+	label: "Link Types"|t,
+	instructions: "Select the types of links would you like to make availble.",
+	id: 'types',
+	name: 'types',
+	options: types,
+	values: settings.types
+})}}
+
+
+{% if entrySources %}
+	{{ forms.checkboxSelectField({
+		label: "Entry Sources"|t,
+		instructions: "Which sources do you want to select entries from?"|t,
+		id: 'entrySources',
+		name: 'entrySources',
+		options: entrySources,
+		values: settings.entrySources
+	})}}
+{% else %}
+	{{ forms.field({
+		label: "Entry Sources"|t,
+	}, '<p class="error">' ~ "No entry sources exist yet."|t ~ '</p>') }}
+{% endif %}
+
+{{ entryTargetLocaleField }}
+
+{% if assetSources %}
+	{{ forms.checkboxSelectField({
+		label: "Asset Sources"|t,
+		instructions: "Which sources do you want to select assets from?"|t,
+		id: 'assetSources',
+		name: 'assetSources',
+		options: assetSources,
+		values: settings.assetSources
+	})}}
+{% else %}
+	{{ forms.field({
+		label: "Asset Sources"|t,
+	}, '<p class="error">' ~ "No asset sources exist yet."|t ~ '</p>') }}
+{% endif %}
+
