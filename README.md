@@ -112,3 +112,7 @@ Each link returns a link object which contains the following:
 ### 0.5
 
 * Initial beta release
+
+## Licence
+
+Copyright 2014 Fruit Studios Ltd
