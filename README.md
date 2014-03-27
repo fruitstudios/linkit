@@ -1,6 +1,6 @@
 # Linkit plugin for Craft
 
-One link field to replace them all, a Multi-purpose link fieldtype for Craft CMS.
+One link field to replace them all, a multi-purpose link fieldtype for Craft CMS.
 
 This plugin adds a fieldtype which links to all sorts of stuff, Linkit can currently link to:
 
