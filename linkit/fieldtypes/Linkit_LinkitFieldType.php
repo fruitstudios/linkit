@@ -102,12 +102,11 @@ class Linkit_LinkitFieldType extends BaseFieldType
 	
 		return craft()->templates->render('linkit/_fieldtype/settings', array(
 			'types' 			   		=> $this->getLinkitTypes(),
-			'settings' 			  	 	=> $this->getSettings(),
 			'entrySources'         		=> $this->getElementSources($entryElementType),
 			'entryTargetLocaleField'    => $this->getTargetLocaleFieldHtml($entryElementType, $this->getSettings()->entryTargetLocale, 'Entry'),
 			'assetSources'         		=> $this->getElementSources($assetElementType),
 			'assetTargetLocaleField'    => $this->getTargetLocaleFieldHtml($assetElementType, $this->getSettings()->assetTargetLocale, 'Asset'),
-			'settings'             		=> $this->getSettings(),
+			'settings'             		=> $this->getSettings()
 		));
 	}
 
@@ -274,6 +273,7 @@ class Linkit_LinkitFieldType extends BaseFieldType
 			{
 				
 				// Process Entry Field - Criteria
+				// TODO - Should I Be Using the craft()->entries->getEntryById( $entryId )
 				$entryCriteria = craft()->elements->getCriteria(ElementType::Entry);
 				if($value['entry'] && $value['type'] == 'entry')
 				{
@@ -291,6 +291,7 @@ class Linkit_LinkitFieldType extends BaseFieldType
 					$entryCriteria->id = false;
 				}
 				$value['entryCriteria'] = $entryCriteria;
+
 				
 				
 				// Process Asset Field - Criteria
@@ -378,7 +379,7 @@ class Linkit_LinkitFieldType extends BaseFieldType
 						break;
 	
 					case('entry'):
-						if($entryCriteria->id)
+						if($entryCriteria->first())
 						{
 							$value['entry'] = $entryCriteria->first();
 							$value['url'] = $entryCriteria->first()->getUrl();
@@ -393,15 +394,15 @@ class Linkit_LinkitFieldType extends BaseFieldType
 						break;
 						
 					case('asset'):
-						if($assetCriteria->id)
+						if($assetCriteria->first())
 						{
-							$value['entry'] = $assetCriteria->first();
+							$value['asset'] = $assetCriteria->first();
 							$value['url'] = $assetCriteria->first()->getUrl();
 							$value['linkText'] = ($value['text'] ? $value['text'] : $assetCriteria->first()->title);
 						}
 						else
 						{
-							$value['entry'] = false; 
+							$value['asset'] = false; 
 							$value['url'] = false;
 							$value['linkText'] = ($value['text'] ? $value['text'] : '');
 						}

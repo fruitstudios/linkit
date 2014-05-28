@@ -110,6 +110,9 @@ Each link returns a link object which contains the following:
 
 ## Changelog
 
+### 0.6
+
+* Fix: PHP Error when returning an entry or asset that has subsequently been deleted
 
 ### 0.5
 
