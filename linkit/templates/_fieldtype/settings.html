@@ -1,5 +1,11 @@
 {% import "_includes/forms" as forms %}
 
+{{ forms.textField({
+	label: "Default Link Text"|t,
+	instructions: "Set a default value for this links text value, can be overridden if custom link text option is selected.",
+	name: 'defaultText',
+	value: settings.defaultText
+}) }}
 
 {{ forms.checkboxField({
 	label: "Allow custom link text"|t,
@@ -21,7 +27,6 @@
 	options: types,
 	values: settings.types
 })}}
-
 
 {% if entrySources %}
 	{{ forms.checkboxSelectField({
@@ -54,4 +59,21 @@
 		label: "Asset Sources"|t,
 	}, '<p class="error">' ~ "No asset sources exist yet."|t ~ '</p>') }}
 {% endif %}
+
+{% if categorySources %}
+	{{ forms.checkboxSelectField({
+		label: "Category Sources"|t,
+		instructions: "Which sources do you want to select categories from?"|t,
+		id: 'categorySources',
+		name: 'categorySources',
+		options: categorySources,
+		values: settings.categorySources
+	})}}
+{% else %}
+	{{ forms.field({
+		label: "Category Sources"|t,
+	}, '<p class="error">' ~ "No category sources exist yet."|t ~ '</p>') }}
+{% endif %}
+
+{{ categoryTargetLocaleField }}
 

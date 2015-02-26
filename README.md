@@ -6,6 +6,7 @@ This plugin adds a fieldtype which links to all sorts of stuff, Linkit can curre
 
 * Entries
 * Assets
+* Categories
 * Emails
 * Phone numbers
 * Custom URLs
@@ -18,7 +19,7 @@ Field settings allow you to:
 * Set which entry/asset sources are available to each field.
 * Allow fields to set custom link text.
 * Allow fields to set links to open in new window.
-
+* Set default link text.
 
 
 ## Installation
@@ -51,6 +52,10 @@ Build your own:
 	    
 			<a href="{{ link.entry.url }}" {{ link.target ? ' target="_blank"' }} title="{{ link.entry.title }}">{{ link.entry.title }}</a>
 			
+	    {% case "category" %}
+	    
+			<a href="{{ link.category.url }}" {{ link.target ? ' target="_blank"' }} title="{{ link.category.title }}">{{ link.category.title }}</a>
+
 	    {% case "asset" %}
 						    
 			<a href="{{ link.asset.url }}" {{ link.target ? ' target="_blank"' }} title="{{ link.asset.title }}">
@@ -89,6 +94,7 @@ Each link returns a link object which contains the following:
 	{{ link.custom }} 	// Custom URL String / False
 	{{ link.tel }}		// Telephone Number / False
 	{{ link.entry }}	// Entry Object / False
+	{{ link.category }}	// Category Object / False
 	{{ link.asset }}	// Asset Object / False
 	// Each link type is returned - only the active type will return data the rest return false
 
@@ -103,12 +109,20 @@ Each link returns a link object which contains the following:
 ## Roadmap
 
 * Force download option
-* Link to categories
 * Rework the way link data is returned
 * Improve handling of target stuff - if it's required
+* Remove requirement for raw
 
 
 ## Changelog
+
+### 0.8
+
+* Added: Category Support
+
+### 0.7
+
+* Added: Default Text - Fieldtype setting to add default link text for a link.
 
 ### 0.6
 

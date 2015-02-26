@@ -25,6 +25,7 @@ class Linkit_LinkitFieldType extends BaseFieldType
 			'tel' => 'Phone Number',
 			'custom' => 'Custom URL',
 			'entry' => 'Entry',
+			'category' => 'Category',
 			'asset' => 'Asset'
 		);
 	}
@@ -43,6 +44,7 @@ class Linkit_LinkitFieldType extends BaseFieldType
 			'custom' => false,
 			'tel' => false,
 			'entry' => false,
+			'category' => false,
 			'asset' => false,
 			
 			'text' => false,
@@ -53,6 +55,7 @@ class Linkit_LinkitFieldType extends BaseFieldType
 			'linkText' => false,
 			'url' => false,
 			
+			'categoryCriteria' => false,
 			'entryCriteria' => false,
 			'assetCriteria' => false,
 		);
@@ -78,7 +81,10 @@ class Linkit_LinkitFieldType extends BaseFieldType
 	{
 	
 		$settings['types'] = AttributeType::Mixed;
+
 		$settings['text'] = AttributeType::Bool;	
+		$settings['defaultText'] = AttributeType::String;	
+
 		$settings['target'] = AttributeType::Bool;	
 	
 		$settings['entrySources'] = AttributeType::Mixed;
@@ -87,6 +93,9 @@ class Linkit_LinkitFieldType extends BaseFieldType
 		$settings['assetSources'] = AttributeType::Mixed;
 		$settings['assetTargetLocale'] = AttributeType::String;	
 		
+		$settings['categorySources'] = AttributeType::Mixed;
+		$settings['categoryTargetLocale'] = AttributeType::String;	
+
 		return $settings;
 	}
 
@@ -99,6 +108,7 @@ class Linkit_LinkitFieldType extends BaseFieldType
 	{		
 		$entryElementType = craft()->elements->getElementType(ElementType::Entry);
 		$assetElementType = craft()->elements->getElementType(ElementType::Asset);
+		$categoryElementType = craft()->elements->getElementType(ElementType::Category);
 	
 		return craft()->templates->render('linkit/_fieldtype/settings', array(
 			'types' 			   		=> $this->getLinkitTypes(),
@@ -106,6 +116,8 @@ class Linkit_LinkitFieldType extends BaseFieldType
 			'entryTargetLocaleField'    => $this->getTargetLocaleFieldHtml($entryElementType, $this->getSettings()->entryTargetLocale, 'Entry'),
 			'assetSources'         		=> $this->getElementSources($assetElementType),
 			'assetTargetLocaleField'    => $this->getTargetLocaleFieldHtml($assetElementType, $this->getSettings()->assetTargetLocale, 'Asset'),
+			'categorySources'         	=> $this->getElementSources($categoryElementType),
+			'categoryTargetLocaleField' => $this->getTargetLocaleFieldHtml($categoryElementType, $this->getSettings()->categoryTargetLocale, 'Category'),
 			'settings'             		=> $this->getSettings()
 		));
 	}
@@ -216,6 +228,47 @@ class Linkit_LinkitFieldType extends BaseFieldType
 			'limit'              => 1,
 			'addButtonLabel'     => 'Select Asset'
 		);
+
+    	// Setup Category Field
+		$categoryElementType = craft()->elements->getElementType(ElementType::Category);
+		
+		if(is_array($value))
+		{
+			if(!($value['categoryCriteria'] instanceof ElementCriteriaModel))
+			{
+				$value['categoryCriteria'] = craft()->elements->getCriteria(ElementType::Category);
+				$value['categoryCriteria']->id = false;
+			}
+		}
+		else
+		{
+			$defaultCategoryCriteria = craft()->elements->getCriteria(ElementType::Category);
+			$defaultCategoryCriteria->id = false;
+		}
+		//$value['categoryCriteria']->status = null;
+		//$value['categoryCriteria']->localeEnabled = null;
+		
+
+		$categorySelectionCriteria = array();
+		$categorySelectionCriteria['localeEnabled'] = null;
+		$categorySelectionCriteria['locale'] = $this->getTargetLocale('Category');		
+		$categorySelectionCriteria['status'] = null;
+
+		$categoryVariables = array(
+			'jsClass'            => 'Craft.BaseElementSelectInput',
+			'elementType'        => new ElementTypeVariable($categoryElementType),
+			'id'                 => craft()->templates->formatInputId($name.'[category]'),
+			'fieldId'            => $this->model->id,
+			'storageKey'         => 'field.'.$this->model->id,
+			'name'               => $name.'[category]',
+			'elements'           => (isset($value['categoryCriteria']) ? $value['categoryCriteria'] : $defaultCategoryCriteria),
+			'sources'            => $settings->categorySources,
+			'criteria'           => $categorySelectionCriteria,
+			'sourceElementId'    => (isset($this->element->id) ? $this->element->id : null),
+			'limit'              => 1,
+			'addButtonLabel'     => 'Select Category'
+		);
+		
 		
     	
        	// Include Javascript & CSS
@@ -231,7 +284,8 @@ class Linkit_LinkitFieldType extends BaseFieldType
             'types' => $types,
             'settings' => $settings,
             'entryVariables' => $entryVariables,        
-            'assetVariables' => $assetVariables        
+            'assetVariables' => $assetVariables,        
+            'categoryVariables' => $categoryVariables        
         ));        
     }
     
@@ -257,9 +311,12 @@ class Linkit_LinkitFieldType extends BaseFieldType
 		
 		if(is_array($value))
 		{
-			// Get Defualts
+			// Get Defaults
 			$defaults = $this->getLinkitValueDefaults();
-		
+
+	    	// Settings
+	    	$settings = $this->getSettings();		
+
 			// Merge With Defaults
 			$value = array_merge($defaults, $value);
 			
@@ -312,6 +369,27 @@ class Linkit_LinkitFieldType extends BaseFieldType
 					$assetCriteria->id = false;
 				}
 				$value['assetCriteria'] = $assetCriteria;	
+
+
+
+				// Process Category Field - Criteria
+				$categoryCriteria = craft()->elements->getCriteria(ElementType::Category);
+				if($value['category'] && $value['type'] == 'category')
+				{
+					if(is_array($value['category']))
+					{
+						$categoryCriteria->id = array_values(array_filter($value['category']));
+					}
+					else
+					{
+						$categoryCriteria->id = false;
+					}
+				}
+				else
+				{
+					$categoryCriteria->id = false;
+				}
+				$value['categoryCriteria'] = $categoryCriteria;					
 					
 				
 				/* 
@@ -359,23 +437,25 @@ class Linkit_LinkitFieldType extends BaseFieldType
 				$value['criteria'] = $entryCriteria;			
 				*/						
 
-				
+				// Set default link text?
+				$linkText = $settings['defaultText'] != '' && $value['text'] == '' ? $settings['defaultText'] : $value['text'];
+
 				// Define Links, URL & Link Text Per Type
 				switch($value['type'])
 				{
 					case('email'): 
 						$value['url'] = ($value['email'] ? 'mailto:'.$value['email'] : false);
-						$value['linkText'] = ($value['text'] ? $value['text'] : $value['email']);
+						$value['linkText'] = ($linkText ? $linkText : $value['email']);
 						break;
 	
 					case('tel'):
 						$value['url'] = ($value['tel'] ? 'tel:'.$value['tel'] : false);
-						$value['linkText'] = ($value['text'] ? $value['text'] : $value['tel']);
+						$value['linkText'] = ($linkText ? $linkText : $value['tel']);
 						break;
 	
 					case('custom'):
 						$value['url'] = ($value['custom'] ? $value['custom'] : false);
-						$value['linkText'] = ($value['text'] ? $value['text'] : $value['custom']);
+						$value['linkText'] = ($linkText ? $linkText : $value['custom']);
 						break;
 	
 					case('entry'):
@@ -383,13 +463,13 @@ class Linkit_LinkitFieldType extends BaseFieldType
 						{
 							$value['entry'] = $entryCriteria->first();
 							$value['url'] = $entryCriteria->first()->getUrl();
-							$value['linkText'] = ($value['text'] ? $value['text'] : $entryCriteria->first()->title);
+							$value['linkText'] = ($linkText ? $linkText : $entryCriteria->first()->title);
 						}
 						else
 						{
 							$value['entry'] = false; 
 							$value['url'] = false;
-							$value['linkText'] = ($value['text'] ? $value['text'] : '');
+							$value['linkText'] = ($linkText ? $linkText : '');
 						}
 						break;
 						
@@ -398,15 +478,32 @@ class Linkit_LinkitFieldType extends BaseFieldType
 						{
 							$value['asset'] = $assetCriteria->first();
 							$value['url'] = $assetCriteria->first()->getUrl();
-							$value['linkText'] = ($value['text'] ? $value['text'] : $assetCriteria->first()->title);
+							$value['linkText'] = ($linkText ? $linkText : $assetCriteria->first()->title);
 						}
 						else
 						{
 							$value['asset'] = false; 
 							$value['url'] = false;
-							$value['linkText'] = ($value['text'] ? $value['text'] : '');
+							$value['linkText'] = ($linkText ? $linkText : '');
 						}
 						break;
+
+					case('category'):
+						if($categoryCriteria->first())
+						{
+							$value['category'] = $categoryCriteria->first();
+							$value['url'] = $categoryCriteria->first()->getUrl();
+							$value['linkText'] = ($linkText ? $linkText : $categoryCriteria->first()->title);
+						}
+						else
+						{
+							$value['category'] = false; 
+							$value['url'] = false;
+							$value['linkText'] = ($linkText ? $linkText : '');
+						}
+						break;
+						
+
 				}
 				
 				// Set Unused Link Types To false
@@ -415,7 +512,8 @@ class Linkit_LinkitFieldType extends BaseFieldType
 				$value['tel'] = ($value['type'] == 'tel' ? $value['tel'] : false);
 				$value['entry'] = ($value['type'] == 'entry' ? $value['entry'] : false);
 				$value['asset'] = ($value['type'] == 'asset' ? $value['asset'] : false);
-				
+				$value['category'] = ($value['type'] == 'category' ? $value['category'] : false);
+
 				// Set Target
 				$value['target'] = ($value['target'] == '1' ? '_blank' : false);
 				
@@ -445,6 +543,10 @@ class Linkit_LinkitFieldType extends BaseFieldType
 		else if ($type == 'Asset')
 		{
 			$targetLocale = $this->getSettings()->entryTargetLocale;
+		}
+		else if ($type == 'Category')
+		{
+			$targetLocale = $this->getSettings()->categoryTargetLocale;
 		}
 
 		if ($targetLocale)
@@ -518,6 +620,14 @@ class Linkit_LinkitFieldType extends BaseFieldType
 						$errors[] = Craft::t('Please select an asset.');
 					}
 					break;
+
+				case('category'):
+					if($value['category'] == '')
+					{
+						$errors[] = Craft::t('Please select a category.');
+					}
+					break;
+
 			}		
 		}
 
