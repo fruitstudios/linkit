@@ -116,6 +116,10 @@ Each link returns a link object which contains the following:
 
 ## Changelog
 
+### 0.8.1
+
+* Added: Hide the Link To... select when only one link type has been selected for the field.
+
 ### 0.8
 
 * Added: Category Support
