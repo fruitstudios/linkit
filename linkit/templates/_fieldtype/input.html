@@ -5,7 +5,10 @@
 <div class="linkit">
 
 	<input type="hidden" name="{{ name }}" value="" />
+
 	
+	{% if types|length > 2 %}
+
 	<div class="linkit-type">
 	{{ forms.selectField({
 		id: name~'-Type',
@@ -14,9 +17,13 @@
 		options: types,
 		value: type is defined ? type
 	}) }}
-	</div>
-	
+	</div>	
+
 	<div class="linkit-options{{ type is not defined or type == '' ? ' hidden' }}">
+
+	{% endif %}
+
+	
 	
 		{% if types.email is defined %}
 		<div class="linkit-type-option linkit-email{{ type != 'email' ? ' hidden' }}">
@@ -95,6 +102,9 @@
 			}) }}
 		</div>
 		{% endif %}
+
+	{% if types|length > 2 %}
 	</div>
+	{% endif %}
 	
 </div>
