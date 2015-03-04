@@ -136,10 +136,12 @@ class Linkit_LinkitFieldType extends BaseFieldType
     	
     	// Linkit Types
 		$availableTypes = $this->getLinkitTypes();	   
-		$types = array('' => 'Link To...');		 	
+		$types = array('' => 'Link To...');
+		$isSingleType = false;
        	if(is_array($settings['types']))
     	{
-			foreach ($settings['types'] as $type)
+    		$isSingleType = count($settings['types']) > 1 ? false : $settings['types'][0];	 	
+			foreach($settings['types'] as $type)
 			{
 				$types[$type] = $availableTypes[$type];
 			}
@@ -148,6 +150,8 @@ class Linkit_LinkitFieldType extends BaseFieldType
     	{
 	    	$types = $types + $availableTypes;
     	}
+
+
     	
     	// Setup Entry Field
 		$entryElementType = craft()->elements->getElementType(ElementType::Entry);
@@ -282,6 +286,7 @@ class Linkit_LinkitFieldType extends BaseFieldType
             'name'  => $name,
             'value' => $value,
             'types' => $types,
+            'isSingleType' => $isSingleType,
             'settings' => $settings,
             'entryVariables' => $entryVariables,        
             'assetVariables' => $assetVariables,        
@@ -518,8 +523,7 @@ class Linkit_LinkitFieldType extends BaseFieldType
 				$value['target'] = ($value['target'] == '1' ? '_blank' : false);
 				
 				// Build The Link			
-				$value['link'] = ($value['url'] ? '<a href="'.$value['url'] .'"'.($value['target'] ? ' target="'.$value['target'].'"' : '').' title="'.$value['linkText'].'">'.$value['linkText'].'</a>' : false);
-
+				$value['link'] = ($value['url'] ? TemplateHelper::getRaw('<a href="'.$value['url'] .'"'.($value['target'] ? ' target="'.$value['target'].'"' : '').' title="'.$value['linkText'].'">'.$value['linkText'].'</a>') : false);
 			}
 		}				
 		
