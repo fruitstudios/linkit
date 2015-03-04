@@ -104,17 +104,23 @@ Each link returns a link object which contains the following:
 	{{ link.url }}		// The full url (correct prefix added eg mailto: or tel:)
 	{{ link.linkText }} // The link text string ready to use (If no custom text is provided it generates it based on the link type)
 	
-	{{ link.link|raw }} // Full link HTML ready to use	
+	{{ link.link }}		// Full link HTML ready to use	
 
 ## Roadmap
 
 * Force download option
 * Rework the way link data is returned
 * Improve handling of target stuff - if it's required
-* Remove requirement for raw
 
 
 ## Changelog
+
+### 0.9
+
+* Added: Removed the requirement to use the |raw filter when using the link variable.
+* Fixed: Input field now corectly displays when on one link type is setup.
+
+### 0.8
 
 ### 0.8.1
 
