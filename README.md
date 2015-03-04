@@ -120,8 +120,6 @@ Each link returns a link object which contains the following:
 * Added: Removed the requirement to use the |raw filter when using the link variable.
 * Fixed: Input field now corectly displays when on one link type is setup.
 
-### 0.8
-
 ### 0.8.1
 
 * Added: Hide the Link To... select when only one link type has been selected for the field.
