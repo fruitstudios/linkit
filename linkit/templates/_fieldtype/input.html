@@ -1,25 +1,25 @@
 {% import "_includes/forms" as forms %}
 
-{% set type = value.type is defined and value.type ? value.type : ( isSingleType ? isSingleType : null ) %}
+{% set type = isSingleType ? isSingleType : ( value.type is defined and value.type ? value.type : null) %}
 
 <div class="linkit">
 
 	<input type="hidden" name="{{ name }}" value="" />
 	
-	{% if not isSingleType %}
-	<div class="linkit-type">
-	{{ forms.selectField({
-		id: name~'-Type',
-		class: name~'-Type',
-		name: name~'[type]',
-		options: types,
-		value: type ? type
-	}) }}
-	</div>	
-	<div class="linkit-options{{ type is not defined or type == '' ? ' hidden' }}">
-
+	{% if isSingleType %}
+		<input type="hidden" id="{{ name }}Type" name="{{ name }}[type]" value="{{ type }}" />
+	{% else %}
+		<div class="linkit-type">
+		{{ forms.selectField({
+			id: name~'-Type',
+			class: name~'-Type',
+			name: name~'[type]',
+			options: types,
+			value: type ? type
+		}) }}
+		</div>	
+		<div class="linkit-options{{ type is not defined or type == '' ? ' hidden' }}">
 	{% endif %}
-
 	
 	{% if types.email is defined %}
 		<div class="linkit-type-option linkit-email{{ type != 'email' ? ' hidden' }}">

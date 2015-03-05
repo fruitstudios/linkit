@@ -111,9 +111,15 @@ Each link returns a link object which contains the following:
 * Force download option
 * Rework the way link data is returned
 * Improve handling of target stuff - if it's required
+* More Validation Options
 
 
 ## Changelog
+
+### 0.9.1
+
+* Fixed: Input field not displaying correctly when set to single type when field had previously been saved. 
+* Fixed: Custom text returning false.
 
 ### 0.9
 
