@@ -34,51 +34,51 @@ To install Linkit, follow these steps:
 
 Get the link object:
 
-	{% set link = entry.yourLinkFieldHandle %}
+	{% set yourLink = entry.yourLinkFieldHandle %}
 	
 Just the link - output a pre built HTML link:
 
-	{{ link.link|raw }}
+	{{ yourLink.link|raw }}
 			
 Build a simple custom link:
 
-	<a href="{{ link.url }}" {{ link.target ? ' target="_blank"' }} title="{{ link.linkText }}">{{ link.linkText }}</a>
+	<a href="{{ yourLink.url }}" {{ yourLink.target ? ' target="_blank"' }} title="{{ yourLink.linkText }}">{{ yourLink.linkText }}</a>
 			
 Build your own:			
  
-	{% switch link.type %}
+	{% switch yourLink.type %}
 	
 	    {% case "entry" %}
 	    
-			<a href="{{ link.entry.url }}" {{ link.target ? ' target="_blank"' }} title="{{ link.entry.title }}">{{ link.entry.title }}</a>
+			<a href="{{ yourLink.entry.url }}" {{ yourLink.target ? ' target="_blank"' }} title="{{ yourLink.entry.title }}">{{ yourLink.entry.title }}</a>
 			
 	    {% case "category" %}
 	    
-			<a href="{{ link.category.url }}" {{ link.target ? ' target="_blank"' }} title="{{ link.category.title }}">{{ link.category.title }}</a>
+			<a href="{{ yourLink.category.url }}" {{ yourLink.target ? ' target="_blank"' }} title="{{ yourLink.category.title }}">{{ yourLink.category.title }}</a>
 
 	    {% case "asset" %}
 						    
-			<a href="{{ link.asset.url }}" {{ link.target ? ' target="_blank"' }} title="{{ link.asset.title }}">
-				{% if link.asset.kind == 'image' %}
-					<img src="{{ link.asset.url('thumb') }}" />
+			<a href="{{ yourLink.asset.url }}" {{ yourLink.target ? ' target="_blank"' }} title="{{ yourLink.asset.title }}">
+				{% if yourLink.asset.kind == 'image' %}
+					<img src="{{ yourLink.asset.url('thumb') }}" />
 				{% else %}
-					<img src="thumb-{{ link.asset.kind }}.png" />
+					<img src="thumb-{{ yourLink.asset.kind }}.png" />
 				{% endif %}
 			</a>		
 	
 	    {% case "custom" %}
 	    
-			<a href="{{ link.custom }}" {{ link.target ? ' target="_blank"' }} title="{{ link.linkText }}">
-				<i class="custom-link-icon"></i> {{ link.linkText }}
+			<a href="{{ yourLink.custom }}" {{ yourLink.target ? ' target="_blank"' }} title="{{ yourLink.linkText }}">
+				<i class="custom-link-icon"></i> {{ yourLink.linkText }}
 			</a>
 			
 	    {% case "email" %}
 	    
-			<a href="mailto:{{ link.email }}" {{ link.target ? ' target="_blank"' }} title="{{ link.linkText }}">{{ link.email }}</a></p>
+			<a href="mailto:{{ yourLink.email }}" {{ yourLink.target ? ' target="_blank"' }} title="{{ yourLink.linkText }}">{{ yourLink.email }}</a></p>
 	
 	    {% case "tel" %}
 	    
-			<a href="tel:{{ link.tel }}" {{ link.target ? ' target="_blank"' }} title="{{ link.linkText }}">{{ link.tel }}</a></p>
+			<a href="tel:{{ yourLink.tel }}" {{ yourLink.target ? ' target="_blank"' }} title="{{ yourLink.linkText }}">{{ yourLink.tel }}</a></p>
 	
 	{% endswitch %}
 	
@@ -90,19 +90,19 @@ Each link returns a link object which contains the following:
 
 	{{ link.type }} // Returns the link type - entry, asset, email, tel, custom
 
-	{{ link.email }}  	// Email String / False
-	{{ link.custom }} 	// Custom URL String / False
-	{{ link.tel }}		// Telephone Number / False
-	{{ link.entry }}	// Entry Object / False
-	{{ link.category }}	// Category Object / False
-	{{ link.asset }}	// Asset Object / False
+	{{ yourLink.email }}  	// Email String / False
+	{{ yourLink.custom }} 	// Custom URL String / False
+	{{ yourLink.tel }}		// Telephone Number / False
+	{{ yourLink.entry }}	// Entry Object / False
+	{{ yourLink.category }}	// Category Object / False
+	{{ yourLink.asset }}	// Asset Object / False
 	// Each link type is returned - only the active type will return data the rest return false
 
-	{{ link.text }} 	// The Custom Text String 
-	{{ link.target }}   // True/False (Bool) - Open in new window? 
+	{{ yourLink.text }} 	// The Custom Text String 
+	{{ yourLink.target }}   // True/False (Bool) - Open in new window? 
 	
-	{{ link.url }}		// The full url (correct prefix added eg mailto: or tel:)
-	{{ link.linkText }} // The link text string ready to use (If no custom text is provided it generates it based on the link type)
+	{{ yourLink.url }}		// The full url (correct prefix added eg mailto: or tel:)
+	{{ yourLink.linkText }} // The link text string ready to use (If no custom text is provided it generates it based on the link type)
 	
 	{{ link.link }}		// Full link HTML ready to use	
 
