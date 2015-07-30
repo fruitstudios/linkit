@@ -86,7 +86,7 @@ Build your own:
 
 Each link returns a link object which contains the following:
 
-	{% set link = entry.yourLinkFieldHandle %} // Get the link
+	{% set yourLink = entry.yourLinkFieldHandle %} // Get the link
 
 	{{ yourLink.type }} // Returns the link type - entry, asset, email, tel, custom
 
