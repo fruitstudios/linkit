@@ -88,7 +88,7 @@ Each link returns a link object which contains the following:
 
 	{% set link = entry.yourLinkFieldHandle %} // Get the link
 
-	{{ link.type }} // Returns the link type - entry, asset, email, tel, custom
+	{{ yourLink.type }} // Returns the link type - entry, asset, email, tel, custom
 
 	{{ yourLink.email }}  	// Email String / False
 	{{ yourLink.custom }} 	// Custom URL String / False
@@ -104,7 +104,7 @@ Each link returns a link object which contains the following:
 	{{ yourLink.url }}		// The full url (correct prefix added eg mailto: or tel:)
 	{{ yourLink.linkText }} // The link text string ready to use (If no custom text is provided it generates it based on the link type)
 	
-	{{ link.link }}		// Full link HTML ready to use	
+	{{ yourLink.link }}		// Full link HTML ready to use	
 
 ## Roadmap
 
