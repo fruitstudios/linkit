@@ -86,7 +86,7 @@
 			}) }}
 		</div>
 	{% endif %}
-		
+
 	{% if settings.target %}
 		<div class="linkit-target">
 			{{ forms.checkboxField({
@@ -95,6 +95,18 @@
 				name: name~'[target]',
 				label: 'Open link in new window?',
 				checked: value.target is defined ? value.target
+			}) }}
+		</div>
+	{% endif %}
+
+	{% if settings.nofollow %}
+		<div class="linkit-nofollow">
+			{{ forms.checkboxField({
+				id: name~'Nofollow',
+				class: name~'Nofollow',
+				name: name~'[nofollow]',
+				label: 'Add rel="nofollow" to link?',
+				checked: value.nofollow is defined ? value.nofollow
 			}) }}
 		</div>
 	{% endif %}

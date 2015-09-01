@@ -3,4 +3,5 @@
 	.linkit-options {}
 		.linkit-type-option,
 		.linkit-text,
-		.linkit-target {margin-bottom:16px;}
+		.linkit-target,
+		.linkit-nofollow {margin-bottom:16px;}
