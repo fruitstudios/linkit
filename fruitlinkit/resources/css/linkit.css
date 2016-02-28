@@ -1,0 +1,33 @@
+.fruit-field {
+	overflow: hidden;
+}
+.fruit-field-column {
+	width: 50%;
+	float:left;
+}
+.fruit-field-column:first-child div {
+	padding-right: 8px;
+}
+.fruit-field-column:last-child div {
+	padding-left: 8px;
+}
+.fruit-field-column .checkboxfield {
+	padding-top: 5px;
+}
+.fruitlinkit {}
+.fruitlinkit-type {
+	float:left;
+	margin-bottom:16px;
+	margin-right: 16px;
+}
+.fruitlinkit-type select { max-width: 130px; }
+.fruitlinkit-options {
+	float:left;
+}
+.fruitlinkit-option,
+.fruitlinkit-text,
+.fruitlinkit-target { margin-bottom:16px; }
+
+.fruitlinkit-settings {
+	clear:both;
+}
