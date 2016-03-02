@@ -112,7 +112,7 @@ Some things to do, and ideas for potential features:
 
 ## FruitLinkIt Changelog
 
-### 0.9.1
+### 2.3.1
 
 * Fixed: Target not retaining it's value
 
