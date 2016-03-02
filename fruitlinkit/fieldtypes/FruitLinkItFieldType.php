@@ -197,9 +197,10 @@ class FruitLinkItFieldType extends BaseFieldType
 
             $link->type = isset($value['type']) && $value['type'] != '' ? $value['type'] : false;
             $link->value = $link->type ? $value[$link->type] : false;
-            $link->target = isset($value['target']) ? ($value['target'] == 1 ? '_blank' : false) : false;
             $link->customText = isset($value['customText']) ? $value['customText'] : false;
             $link->defaultText = $settings->defaultText;
+            $link->target = isset($value['target']) ? ($value['target'] ? '_blank' : false) : false;
+
 
             return $link;
         }

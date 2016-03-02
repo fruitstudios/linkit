@@ -112,6 +112,10 @@ Some things to do, and ideas for potential features:
 
 ## FruitLinkIt Changelog
 
+### 0.9.1
+
+* Fixed: Target not retaining it's value
+
 ### 2.3.0
 
 Complete rewrite for Craft 2.5.x, same functionality with some UI tweaks and
