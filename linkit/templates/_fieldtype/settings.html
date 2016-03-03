@@ -43,7 +43,7 @@
 	}, '<p class="error">' ~ "No entry sources exist yet."|t ~ '</p>') }}
 {% endif %}
 
-{{ entryTargetLocaleField }}
+{{ entryTargetLocaleField | raw }}
 
 {% if assetSources %}
 	{{ forms.checkboxSelectField({
@@ -75,5 +75,5 @@
 	}, '<p class="error">' ~ "No category sources exist yet."|t ~ '</p>') }}
 {% endif %}
 
-{{ categoryTargetLocaleField }}
+{{ categoryTargetLocaleField | raw }}
 
