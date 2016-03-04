@@ -19,6 +19,12 @@
 	checked: settings.target
 }) }}
 
+{{ forms.checkboxField({
+	label: "Add rel='nofollow' to link"|t,
+	name: 'nofollow',
+	checked: settings.nofollow
+}) }}
+
 {{ forms.checkboxSelectField({
 	label: "Link Types"|t,
 	instructions: "Select the types of links would you like to make availble.",

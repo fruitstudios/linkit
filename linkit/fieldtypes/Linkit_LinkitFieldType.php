@@ -49,6 +49,7 @@ class Linkit_LinkitFieldType extends BaseFieldType
 			
 			'text' => false,
 			'target' => false,
+			'nofollow' => false,
 
 			'link' => false,
 			
@@ -86,7 +87,8 @@ class Linkit_LinkitFieldType extends BaseFieldType
 		$settings['defaultText'] = AttributeType::String;	
 
 		$settings['target'] = AttributeType::Bool;	
-	
+		$settings['nofollow'] = AttributeType::Bool;
+
 		$settings['entrySources'] = AttributeType::Mixed;
 		$settings['entryTargetLocale'] = AttributeType::String;
 		
@@ -521,9 +523,11 @@ class Linkit_LinkitFieldType extends BaseFieldType
 
 				// Set Target
 				$value['target'] = ($value['target'] == '1' ? '_blank' : false);
-				
+				// Set nofollow
+				$value['nofollow'] = ($value['nofollow'] == '1' ? 'nofollow' : false);
+
 				// Build The Link			
-				$value['link'] = ($value['url'] ? TemplateHelper::getRaw('<a href="'.$value['url'] .'"'.($value['target'] ? ' target="'.$value['target'].'"' : '').' title="'.$value['linkText'].'">'.$value['linkText'].'</a>') : false);
+				$value['link'] = ($value['url'] ? TemplateHelper::getRaw('<a href="'.$value['url'] .'"'.($value['target'] ? ' target="'.$value['target'].'"' : '').' '.($value['nofollow'] ? ' rel="'.$value['nofollow'].'"' : '').' title="'.$value['linkText'].'">'.$value['linkText'].'</a>') : false);
 			}
 		}				
 		
