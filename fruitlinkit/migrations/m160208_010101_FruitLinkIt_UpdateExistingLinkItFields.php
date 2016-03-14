@@ -55,9 +55,17 @@ class m160208_010101_FruitLinkIt_UpdateExistingLinkItFields extends BaseMigratio
                 $existingSettings = $field->settings;
                 $settings = $defaultSettings;
 
-                // Same: Sources
-                $settings['entrySources'] = $existingSettings['entrySources'];
-                $settings['assetSources'] = $existingSettings['assetSources'];
+                // Changed: Asset Sources
+                if(array_key_exists('assetSources', $existingSettings))
+                {
+                    $settings['assetSources'] = $existingSettings['assetSources'];
+                }
+
+                // Changed: Entry Sources
+                if(array_key_exists('entrySources', $existingSettings))
+                {
+                    $settings['entrySources'] = $existingSettings['entrySources'];
+                }                
 
                 // Changed: Types
                 if($existingSettings['types'] != '*')
