@@ -30,6 +30,9 @@ class FruitLinkIt_LinkSettingsModel extends BaseModel
 
             'categorySources' => AttributeType::Mixed,
             'categorySelectionLabel' => array(AttributeType::String, 'default' => Craft::t('Select a category')),
+
+            'productSources' => AttributeType::Mixed,
+            'productSelectionLabel' => array(AttributeType::String, 'default' => Craft::t('Select a product')),
         );
     }
 
@@ -52,6 +55,11 @@ class FruitLinkIt_LinkSettingsModel extends BaseModel
             if( in_array('category', $this->types) && $this->categorySources == '')
             {
                 $this->addError('categorySources', Craft::t('Please select at least 1 category source.'));
+            }
+
+            if( in_array('product', $this->types) && $this->productSources == '')
+            {
+                $this->addError('productSources', Craft::t('Please select at least 1 product source.'));
             }
         }
         else

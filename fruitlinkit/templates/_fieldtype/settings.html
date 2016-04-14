@@ -117,3 +117,31 @@
 		instructions: "No category sources exist yet."|t
 	}) }} #}
 {% endif %}
+
+{% if elementSources.product %}
+
+	<hr>
+
+	{{ forms.checkboxSelectField({
+		label: "Product Sources"|t,
+		instructions: "Which sources do you want to select products from?"|t,
+		id: 'productSources',
+		name: 'productSources',
+		options: elementSources.product,
+		values: settings.productSources,
+		errors: settings.getErrors('productSources'),
+	})}}
+
+	{{ forms.textField({
+		label: "Product Selection Label"|t,
+		instructions: "Enter the text you want to appear on the product selection input."|t,
+		name: 'productSelectionLabel',
+		value: settings.productSelectionLabel
+	}) }}
+
+{% else %}
+	{# {{ forms.field({
+		label: "Entry Sources"|t,
+		instructions: "No entry sources exist yet."|t
+	}) }} #}
+{% endif %}
