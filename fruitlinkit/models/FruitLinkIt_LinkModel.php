@@ -17,6 +17,7 @@ class FruitLinkIt_LinkModel extends BaseModel
     private $_entry;
     private $_asset;
     private $_category;
+    private $_product;
 
     protected function defineAttributes()
     {
@@ -100,6 +101,13 @@ class FruitLinkIt_LinkModel extends BaseModel
                     $url = $category->enabled ? $category->getUrl() : false;
                 }
                 break;
+            case('product'):
+                $product = $this->_product ? $this->_product : $this->getProduct();
+                if($product)
+                {
+                    $url = $product->status == 'live' ? $product->getUrl() : false;
+                }
+                break;
             case('custom'):
                 $url = $this->value;
                 break;
@@ -148,6 +156,13 @@ class FruitLinkIt_LinkModel extends BaseModel
                 if($category)
                 {
                     $text = $category->title;
+                }
+                break;
+            case('product'):
+                $product = $this->_product ? $this->_product : $this->getProduct();
+                if($product)
+                {
+                    $text = $product->name;
                 }
                 break;
             default:
@@ -237,6 +252,25 @@ class FruitLinkIt_LinkModel extends BaseModel
         return $this->_category;
     }
 
+    public function getProduct()
+    {
+        if($this->type != 'product')
+        {
+            return false;
+        }
+
+        if(!$this->_product)
+        {
+            $id = is_array($this->value) ? $this->value[0] : false;
+            if( $id && $product = craft()->commerce_products->getProductById($id) )
+            {
+
+                $this->_product = $product;
+            }
+        }
+        return $this->_product;
+    }
+
     public function validate($attributes = null, $clearErrors = true)
     {
         switch($this->type)
@@ -281,6 +315,13 @@ class FruitLinkIt_LinkModel extends BaseModel
                 if($this->value == '')
                 {
                     $this->addError('value', Craft::t('Please select a category.'));
+                }
+                break;
+
+            case('product'):
+                if($this->value == '')
+                {
+                    $this->addError('value', Craft::t('Please select a product.'));
                 }
                 break;
         }

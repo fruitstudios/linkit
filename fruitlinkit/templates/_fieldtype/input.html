@@ -93,6 +93,16 @@
 		</div>
 		{% endif %}
 
+		{% if types.product is defined %}
+		<div class="fruitlinkit-option fruitlinkit-product{{ type != 'product' ? ' hidden' }}">
+			{{ forms.elementSelectField({
+				id: name~'Product',
+				class: name~'Product',
+				name: name~'[product]',
+			}|merge(elementSelectSettings.product)) }}
+		</div>
+		{% endif %}
+
 	</div>
 
 	{# Text & Target #}

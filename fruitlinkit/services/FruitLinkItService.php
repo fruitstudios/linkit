@@ -16,11 +16,13 @@ class FruitLinkItService extends BaseApplicationComponent
 {
     protected $plugin;
     protected $pluginHandle;
+    protected $commerce;
 
     public function __construct()
     {
         $this->plugin = craft()->plugins->getPlugin('fruitlinkit');
         $this->pluginHandle = $this->plugin->getPluginHandle();
+        $this->commerce = craft()->plugins->getPlugin('commerce', true);
     }
 
     public function getLinkItElementSources()
@@ -29,6 +31,7 @@ class FruitLinkItService extends BaseApplicationComponent
             'entry' => $this->_getElementSourcesWithUrls(ElementType::Entry),
             'asset' => $this->_getElementSourcesWithUrls(ElementType::Asset),
             'category' => $this->_getElementSourcesWithUrls(ElementType::Category),
+            'product' => $this->commerce && $this->commerce->isInstalled ? $this->_getElementSourcesWithUrls('Commerce_Product') : null,
         );
     }
 

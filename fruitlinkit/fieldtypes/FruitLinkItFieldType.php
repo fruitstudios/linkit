@@ -88,6 +88,18 @@ class FruitLinkItFieldType extends BaseFieldType
                 'limit' => 1,
                 'addButtonLabel' => Craft::t($settings->categorySelectionLabel),
                 'storageKey' => 'field.'.$this->model->id,
+            ),
+            'product' => array(
+                'elementType' => new ElementTypeVariable( craft()->elements->getElementType('Commerce_Product') ),
+                'elements' => $value && $value->product ? array($value->product) : null,
+                'sources' => $settings->productSources,
+                'criteria' => array(
+                    'status' => null,
+                ),
+                'sourceElementId' => ( isset($this->element->id) ? $this->element->id : null ),
+                'limit' => 1,
+                'addButtonLabel' => Craft::t($settings->productSelectionLabel),
+                'storageKey' => 'field.'.$this->model->id,
             )
         );
 
@@ -170,6 +182,10 @@ class FruitLinkItFieldType extends BaseFieldType
         {
             unset($types['asset']);
         }
+        if(!$sources['product'])
+        {
+            unset($types['product']);
+        }
         return $types;
 	}
 
@@ -182,6 +198,7 @@ class FruitLinkItFieldType extends BaseFieldType
 			'entry' => Craft::t('Entry'),
 			'category' => Craft::t('Category'),
 			'asset' => Craft::t('Asset'),
+      'product' => Craft::t('Product'),
 		);
 	}
 
