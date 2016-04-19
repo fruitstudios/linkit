@@ -15,6 +15,7 @@ This plugin adds a fieldtype which links to all sorts of stuff, Link It can curr
 * Entries
 * Assets
 * Categories
+* Products (Requires Commerce)
 * Emails
 * Phone numbers
 * Custom URLs
