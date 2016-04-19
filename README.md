@@ -112,6 +112,10 @@ Some things to do, and ideas for potential features:
 
 ## FruitLinkIt Changelog
 
+### 2.3.3
+
+* Added: Support For Commerce Products (Thanks to Isaac Gray)
+
 ### 2.3.2
 
 * Fixed: Migration error when some settings values not defined.

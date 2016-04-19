@@ -10,7 +10,7 @@ class FruitLinkItPlugin extends BasePlugin
 
     public function getVersion()
     {
-        return '2.3.2';
+        return '2.3.3';
     }
 
     public function getSchemaVersion()
