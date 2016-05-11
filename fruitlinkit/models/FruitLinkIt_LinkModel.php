@@ -18,6 +18,7 @@ class FruitLinkIt_LinkModel extends BaseModel
     private $_asset;
     private $_category;
     private $_product;
+    private $_thirdPartyTypes;
 
     protected function defineAttributes()
     {
@@ -117,6 +118,14 @@ class FruitLinkIt_LinkModel extends BaseModel
             case('email'):
                 $url = 'mailto:'.$this->value;
                 break;
+            default:
+                // Let plugins handle their own urls
+                $data = $this->getThirdPartyTypeData($this->type);
+                if (isset($data['url']))
+                {
+                  $url = $data['url'];
+                }
+                break;
         }
         return $url;
     }
@@ -166,7 +175,16 @@ class FruitLinkIt_LinkModel extends BaseModel
                 }
                 break;
             default:
-                $text = $this->value;
+                // Let plugins handle their own text value if they want
+                $data = $this->getThirdPartyTypeData($this->type);
+                if (isset($data['text']))
+                {
+                  $text = $data['text'];
+                }
+                else
+                {
+                  $text = $this->value;
+                }
                 break;
 
         }
@@ -271,6 +289,35 @@ class FruitLinkIt_LinkModel extends BaseModel
         return $this->_product;
     }
 
+    public function getThirdPartyTypeData($type)
+    {
+
+        if(!$this->_thirdPartyTypes[$type])
+        {
+            $id = is_array($this->value) ? $this->value[0] : false;
+            if ($id)
+            {
+
+              // Allow plugins to define their own url and text data
+              $allPluginElements = craft()->plugins->call('linkit_getElementData', array(
+                  'id' => $id,
+                  'type' => $type
+              ));
+
+              foreach ($allPluginElements as $pluginElement)
+              {
+                  if ($pluginElement)
+                  {
+                      $this->_thirdPartyTypes[$type] = $pluginElement;
+                  }
+              }
+
+            }
+
+        }
+        return $this->_thirdPartyTypes[$type];
+    }
+
     public function validate($attributes = null, $clearErrors = true)
     {
         switch($this->type)
@@ -324,6 +371,8 @@ class FruitLinkIt_LinkModel extends BaseModel
                     $this->addError('value', Craft::t('Please select a product.'));
                 }
                 break;
+
+            // XXX: likely need something here when templating
         }
 
         return !$this->hasErrors();

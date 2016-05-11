@@ -16,7 +16,7 @@ class FruitLinkIt_LinkSettingsModel extends BaseModel
 {
     protected function defineAttributes()
     {
-        return array(
+        $attributes = array(
             'types' => AttributeType::Mixed,
             'allowCustomText' => AttributeType::Bool,
             'defaultText' => AttributeType::String,
@@ -34,6 +34,16 @@ class FruitLinkIt_LinkSettingsModel extends BaseModel
             'productSources' => AttributeType::Mixed,
             'productSelectionLabel' => array(AttributeType::String, 'default' => Craft::t('Select a product')),
         );
+
+        // Allow plugins to add their own attributes
+        $allPluginSettingsAttributes = craft()->plugins->call('linkit_getSettingsAttributes');
+
+        foreach ($allPluginSettingsAttributes as $pluginSettingsAttribute)
+        {
+            $attributes = array_merge($attributes, $pluginSettingsAttribute);
+        }
+
+        return $attributes;
     }
 
     public function validate($attributes = null, $clearErrors = true)
@@ -61,6 +71,8 @@ class FruitLinkIt_LinkSettingsModel extends BaseModel
             {
                 $this->addError('productSources', Craft::t('Please select at least 1 product source.'));
             }
+
+            // XXX: what do we do about this?
         }
         else
         {

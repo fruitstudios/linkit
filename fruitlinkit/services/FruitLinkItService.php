@@ -35,6 +35,20 @@ class FruitLinkItService extends BaseApplicationComponent
         );
     }
 
+    // Gives plugins a chance to add their own element sources
+    public function getThirdPartyElementSettings()
+    {
+      $elementSettings = array();
+      $allPluginElementSettings = craft()->plugins->call('linkit_addElementSettings');
+
+      foreach ($allPluginElementSettings as $pluginElementSetting)
+      {
+        $elementSettings = array_merge($elementSettings, $pluginElementSetting);
+      }
+
+      return $elementSettings;
+    }
+
     private function _getElementSourcesWithUrls($type)
     {
         $elementType = craft()->elements->getElementType($type);

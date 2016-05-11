@@ -145,3 +145,25 @@
 		instructions: "No entry sources exist yet."|t
 	}) }} #}
 {% endif %}
+
+{% for key, elementSettings in thirdPartyElementSettings %}
+	<hr>
+
+	{{ forms.checkboxSelectField({
+		label: elementSettings.name|t,
+		instructions: "Which sources do you want to select "~elementSettings.pluralName|lower~" from?"|t,
+		id: key~'Sources',
+		name: key~'Sources',
+		options: elementSettings.sources,
+		values: settings[key~'Sources'],
+		errors: settings.getErrors(key~'Sources'),
+	})}}
+
+	{{ forms.textField({
+		label: elementSettings.name~" Selection Label"|t,
+		instructions: "Enter the text you want to appear on the "~elementSettings.name|lower~" selection input."|t,
+		name: key~'SelectionLabel',
+		value: settings[key~'SelectionLabel']
+	}) }}
+
+{% endfor %}

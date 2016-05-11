@@ -13,14 +13,15 @@ class FruitLinkItFieldType extends BaseFieldType
         return array(AttributeType::Mixed);
     }
 
-	public function getSettingsHtml()
-	{
-		return craft()->templates->render('fruitlinkit/_fieldtype/settings', array(
-			'settings'             		=> $this->getSettings(),
-            'types' 			   		=> $this->_getAvaiableLinkItTypes(),
-            'elementSources'            => craft()->fruitLinkIt->getLinkItElementSources(),
-		));
-	}
+    public function getSettingsHtml()
+    {
+        return craft()->templates->render('fruitlinkit/_fieldtype/settings', array(
+          'settings'                  => $this->getSettings(),
+          'types'                     => $this->_getAvaiableLinkItTypes(),
+          'elementSources'            => craft()->fruitLinkIt->getLinkItElementSources(),
+          'thirdPartyElementSettings' => craft()->fruitLinkIt->getThirdPartyElementSettings(),
+        ));
+    }
 
     public function getInputHtml($name, $value)
     {
@@ -102,6 +103,8 @@ class FruitLinkItFieldType extends BaseFieldType
                 'storageKey' => 'field.'.$this->model->id,
             )
         );
+
+        // XXX Allow plugins to add their own Element Select settings
 
 		// Render Field
     	return craft()->templates->render('fruitlinkit/_fieldtype/input', array(
@@ -191,7 +194,7 @@ class FruitLinkItFieldType extends BaseFieldType
 
     private function _getLinkItTypes()
 	{
-		return array(
+		$types = array(
 			'email' => Craft::t('Email Address'),
 			'tel' => Craft::t('Phone Number'),
 			'custom' => Craft::t('Custom URL'),
@@ -200,6 +203,16 @@ class FruitLinkItFieldType extends BaseFieldType
 			'asset' => Craft::t('Asset'),
       'product' => Craft::t('Product'),
 		);
+
+    // Give plugins a chance to add their own types
+    $allPluginLinkItTypes = craft()->plugins->call('linkit_registerTypes');
+
+    foreach ($allPluginLinkItTypes as $pluginLinkItType)
+    {
+      $types = array_merge($types, $pluginLinkItType);
+    }
+
+    return $types;
 	}
 
     private function _valueToModel($value, $settings = false)
