@@ -76,6 +76,7 @@ class FruitLinkItFieldType extends BaseFieldType
                 'sources' => $settings->assetSources,
                 'criteria' => array(
                     'status' => null,
+                    'locale' => $locale,
                 ),
                 'sourceElementId' => ( isset($this->element->id) ? $this->element->id : null ),
                 'limit' => 1,
