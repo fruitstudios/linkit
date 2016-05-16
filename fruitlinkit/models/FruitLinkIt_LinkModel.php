@@ -369,7 +369,21 @@ class FruitLinkIt_LinkModel extends BaseModel
                 }
                 break;
 
-            // XXX: likely need something here when templating
+            default:
+              if($this->value == '')
+              {
+                $thirdPartyElementSettings = craft()->fruitLinkIt->getThirdPartyElementSettings();
+                $thirdPartyElementSetting = $thirdPartyElementSettings[$this->type];
+                if (isset($thirdPartyElementSettings[$this->type]) && isset($thirdPartyElementSettings[$this->type]['emptyInputErrorMessage']))
+                {
+                  $this->addError('value', $thirdPartyElementSettings[$this->type]['emptyInputErrorMessage']);
+                }
+                else
+                {
+                  $this->addError('value', Craft::t('Please select something.'));
+                }
+              }
+              break;
         }
 
         return !$this->hasErrors();
