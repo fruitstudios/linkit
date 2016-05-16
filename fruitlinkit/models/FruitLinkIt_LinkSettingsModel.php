@@ -72,7 +72,15 @@ class FruitLinkIt_LinkSettingsModel extends BaseModel
                 $this->addError('productSources', Craft::t('Please select at least 1 product source.'));
             }
 
-            // XXX: what do we do about this?
+            // Handle third party plugin settings errors
+            $thirdPartyElementSettings = craft()->fruitLinkIt->getThirdPartyElementSettings();
+            foreach ($thirdPartyElementSettings as $thirdPartyHandle => $thirdPartyElementSettingArray) {
+              if( in_array($thirdPartyHandle, $this->types) && $this[$thirdPartyHandle.'Sources'] == '')
+              {
+                  $this->addError($thirdPartyHandle.'Sources', Craft::t('Please select at least 1 '.strtolower($thirdPartyElementSettingArray['name']).' source.'));
+              }
+            }
+
         }
         else
         {

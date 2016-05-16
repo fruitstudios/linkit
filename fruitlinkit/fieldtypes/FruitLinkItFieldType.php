@@ -107,16 +107,16 @@ class FruitLinkItFieldType extends BaseFieldType
         // Allow plugins to add their own Element Select settings
         $thirdPartyElementSettings = craft()->fruitLinkIt->getThirdPartyElementSettings();
 
-        foreach ($thirdPartyElementSettings as $key => $thirdPartyElementSetting) {
+        foreach ($thirdPartyElementSettings as $thirdPartyHandle => $thirdPartyElementSettingArray) {
             $data = false;
             if ($value) {
-              $data = $value->getThirdPartyTypeData($key);
+              $data = $value->getThirdPartyTypeData($thirdPartyHandle);
             }
 
-            $elementSelectSettings[$key] = array(
-              'elementType' => new ElementTypeVariable( craft()->elements->getElementType($thirdPartyElementSetting['elementType']) ),
+            $elementSelectSettings[$thirdPartyHandle] = array(
+              'elementType' => new ElementTypeVariable( craft()->elements->getElementType($thirdPartyElementSettingArray['elementType']) ),
               'elements' => $value && $data && $data['element'] ? array($data['element']) : null,
-              'sources' => $settings[$key.'Sources'],
+              'sources' => $settings[$thirdPartyHandle.'Sources'],
               'criteria' => array(
                   'status' => null,
               ),
