@@ -104,15 +104,33 @@ class FruitLinkItFieldType extends BaseFieldType
             )
         );
 
-        // XXX Allow plugins to add their own Element Select settings
+        // Allow plugins to add their own Element Select settings
+        $thirdPartyElementSettings = craft()->fruitLinkIt->getThirdPartyElementSettings();
+        foreach ($thirdPartyElementSettings as $key => $thirdPartyElementSetting) {
 
-		// Render Field
-    	return craft()->templates->render('fruitlinkit/_fieldtype/input', array(
+          $data = $value->getThirdPartyTypeData($key);
+
+          $elementSelectSettings[$key] = array(
+            'elementType' => new ElementTypeVariable( craft()->elements->getElementType($thirdPartyElementSetting['elementType']) ),
+            'elements' => $value && $data['element'] ? array($data['element']) : null,
+            'sources' => $settings[$key.'Sources'],
+            'criteria' => array(
+                'status' => null,
+            ),
+            'sourceElementId' => ( isset($this->element->id) ? $this->element->id : null ),
+            'limit' => 1,
+            'addButtonLabel' => Craft::t($settings[$key.'SelectionLabel']),
+            'storageKey' => 'field.'.$this->model->id
+          );
+        }
+
+        // Render Field
+        return craft()->templates->render('fruitlinkit/_fieldtype/input', array(
             'name'  => $name,
             'value' => $value,
             'settings' => $settings,
             'types' => $types,
-            'elementSelectSettings' => $elementSelectSettings,
+            'elementSelectSettings' => $elementSelectSettings
         ));
     }
 
