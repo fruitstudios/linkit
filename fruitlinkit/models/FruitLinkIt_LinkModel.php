@@ -291,18 +291,15 @@ class FruitLinkIt_LinkModel extends BaseModel
 
     public function getThirdPartyTypeData($type)
     {
-
         if(!$this->_thirdPartyTypes[$type])
         {
             $id = is_array($this->value) ? $this->value[0] : false;
+
             if ($id)
             {
 
               // Allow plugins to define their own url and text data
-              $allPluginElements = craft()->plugins->call('linkit_getElementData', array(
-                  'id' => $id,
-                  'type' => $type
-              ));
+              $allPluginElements = craft()->plugins->call('linkit_getElementData', array($type, $id));
 
               foreach ($allPluginElements as $pluginElement)
               {
