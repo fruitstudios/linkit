@@ -106,22 +106,26 @@ class FruitLinkItFieldType extends BaseFieldType
 
         // Allow plugins to add their own Element Select settings
         $thirdPartyElementSettings = craft()->fruitLinkIt->getThirdPartyElementSettings();
+
         foreach ($thirdPartyElementSettings as $key => $thirdPartyElementSetting) {
+            $data = false;
+            if ($value) {
+              $data = $value->getThirdPartyTypeData($key);
+            }
 
-          $data = $value->getThirdPartyTypeData($key);
+            $elementSelectSettings[$key] = array(
+              'elementType' => new ElementTypeVariable( craft()->elements->getElementType($thirdPartyElementSetting['elementType']) ),
+              'elements' => $value && $data && $data['element'] ? array($data['element']) : null,
+              'sources' => $settings[$key.'Sources'],
+              'criteria' => array(
+                  'status' => null,
+              ),
+              'sourceElementId' => ( isset($this->element->id) ? $this->element->id : null ),
+              'limit' => 1,
+              'addButtonLabel' => Craft::t($settings[$key.'SelectionLabel']),
+              'storageKey' => 'field.'.$this->model->id
+            );
 
-          $elementSelectSettings[$key] = array(
-            'elementType' => new ElementTypeVariable( craft()->elements->getElementType($thirdPartyElementSetting['elementType']) ),
-            'elements' => $value && $data['element'] ? array($data['element']) : null,
-            'sources' => $settings[$key.'Sources'],
-            'criteria' => array(
-                'status' => null,
-            ),
-            'sourceElementId' => ( isset($this->element->id) ? $this->element->id : null ),
-            'limit' => 1,
-            'addButtonLabel' => Craft::t($settings[$key.'SelectionLabel']),
-            'storageKey' => 'field.'.$this->model->id
-          );
         }
 
         // Render Field
@@ -223,7 +227,7 @@ class FruitLinkItFieldType extends BaseFieldType
 		);
 
     // Give plugins a chance to add their own types
-    $allPluginLinkItTypes = craft()->plugins->call('linkit_registerTypes');
+    $allPluginLinkItTypes = craft()->plugins->call('linkit_registerElementTypes');
 
     foreach ($allPluginLinkItTypes as $pluginLinkItType)
     {

@@ -105,6 +105,7 @@
 
 		{# Custom types #}
 		{% for key, val in types if key not in ['','email','custom','tel','entry','asset','category','product'] %}
+		{% if elementSelectSettings[key] is defined %}
 		<div class="fruitlinkit-option fruitlinkit-{{ key }}{{ type != key ? ' hidden' }}">
 			{{ forms.elementSelectField({
 				id: name~key,
@@ -112,6 +113,7 @@
 				name: name~'['~key~']',
 			}|merge(elementSelectSettings[key])) }}
 		</div>
+		{% endif %}
 		{% endfor %}
 	</div>
 

@@ -35,12 +35,12 @@ class FruitLinkIt_LinkSettingsModel extends BaseModel
             'productSelectionLabel' => array(AttributeType::String, 'default' => Craft::t('Select a product')),
         );
 
-        // Allow plugins to add their own attributes
-        $allPluginSettingsAttributes = craft()->plugins->call('linkit_getSettingsAttributes');
-
-        foreach ($allPluginSettingsAttributes as $pluginSettingsAttribute)
-        {
-            $attributes = array_merge($attributes, $pluginSettingsAttribute);
+        $thirdPartyElementSettings = craft()->fruitLinkIt->getThirdPartyElementSettings();
+        foreach ($thirdPartyElementSettings as $key => $thirdPartyElementSetting) {
+          $attributes = array_merge($attributes, array(
+            $key.'Sources' => AttributeType::Mixed,
+            $key.'SelectionLabel' => array(AttributeType::String, 'default' => $thirdPartyElementSetting['selectionLabelDefault'])
+          ));
         }
 
         return $attributes;
