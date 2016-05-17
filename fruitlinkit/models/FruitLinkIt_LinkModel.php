@@ -119,8 +119,8 @@ class FruitLinkIt_LinkModel extends BaseModel
                 $url = 'mailto:'.$this->value;
                 break;
             default:
-                // Let plugins handle their own urls
-                $data = $this->getThirdPartyTypeData($this->type);
+                // Let third party elements handle their own urls
+                $data = $this->getThirdPartyElementData($this->type);
                 if (isset($data['url']))
                 {
                   $url = $data['url'];
@@ -175,8 +175,8 @@ class FruitLinkIt_LinkModel extends BaseModel
                 }
                 break;
             default:
-                // Let plugins handle their own text value if they want
-                $data = $this->getThirdPartyTypeData($this->type);
+                // Let third party elements handle their own text value if they want
+                $data = $this->getThirdPartyElementData($this->type);
                 if (isset($data['text']))
                 {
                   $text = $data['text'];
@@ -289,9 +289,9 @@ class FruitLinkIt_LinkModel extends BaseModel
         return $this->_product;
     }
 
-    public function getThirdPartyTypeData($type)
+    public function getThirdPartyElementData($type)
     {
-        if(!$this->_thirdPartyTypes[$type])
+        if(!isset($this->_thirdPartyTypes[$type]) || !$this->_thirdPartyTypes[$type])
         {
             $id = is_array($this->value) ? $this->value[0] : false;
 
@@ -312,7 +312,7 @@ class FruitLinkIt_LinkModel extends BaseModel
             }
 
         }
-        return $this->_thirdPartyTypes[$type];
+        return isset($this->_thirdPartyTypes[$type]) ? $this->_thirdPartyTypes[$type] : null;
     }
 
     public function validate($attributes = null, $clearErrors = true)
@@ -372,11 +372,10 @@ class FruitLinkIt_LinkModel extends BaseModel
             default:
               if($this->value == '')
               {
-                $thirdPartyElementSettings = craft()->fruitLinkIt->getThirdPartyElementSettings();
-                $thirdPartyElementSetting = $thirdPartyElementSettings[$this->type];
-                if (isset($thirdPartyElementSettings[$this->type]) && isset($thirdPartyElementSettings[$this->type]['emptyInputErrorMessage']))
+                $thirdPartyElementTypes = craft()->fruitLinkIt->getThirdPartyElementTypes();
+                if (isset($thirdPartyElementTypes[$this->type]) && isset($thirdPartyElementTypes[$this->type]['emptyInputErrorMessage']))
                 {
-                  $this->addError('value', $thirdPartyElementSettings[$this->type]['emptyInputErrorMessage']);
+                  $this->addError('value', $thirdPartyElementTypes[$this->type]['emptyInputErrorMessage']);
                 }
                 else
                 {

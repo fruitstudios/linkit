@@ -35,18 +35,18 @@ class FruitLinkItService extends BaseApplicationComponent
         );
     }
 
-    // Gives plugins a chance to add their own element sources
-    public function getThirdPartyElementSettings()
+    // Gives plugins a chance to add their own element types
+    public function getThirdPartyElementTypes()
     {
-      $elementSettings = array();
-      $allPluginElementSettings = craft()->plugins->call('linkit_addElementSettings');
+      $elementTypesConfig = array();
+      $allPluginElementTypes = craft()->plugins->call('linkit_registerElementTypes');
 
-      foreach ($allPluginElementSettings as $pluginElementSetting)
+      foreach ($allPluginElementTypes as $pluginElementType)
       {
-        $elementSettings = array_merge($elementSettings, $pluginElementSetting);
+        $elementTypesConfig = array_merge($elementTypesConfig, $pluginElementType);
       }
 
-      return $elementSettings;
+      return $elementTypesConfig;
     }
 
     private function _getElementSourcesWithUrls($type)

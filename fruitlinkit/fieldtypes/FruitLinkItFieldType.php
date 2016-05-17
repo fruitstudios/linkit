@@ -19,7 +19,7 @@ class FruitLinkItFieldType extends BaseFieldType
           'settings'                  => $this->getSettings(),
           'types'                     => $this->_getAvaiableLinkItTypes(),
           'elementSources'            => craft()->fruitLinkIt->getLinkItElementSources(),
-          'thirdPartyElementSettings' => craft()->fruitLinkIt->getThirdPartyElementSettings(),
+          'thirdPartyElementTypes'    => craft()->fruitLinkIt->getThirdPartyElementTypes(),
         ));
     }
 
@@ -104,28 +104,27 @@ class FruitLinkItFieldType extends BaseFieldType
             )
         );
 
-        // Allow plugins to add their own Element Select settings
-        $thirdPartyElementSettings = craft()->fruitLinkIt->getThirdPartyElementSettings();
+        // Go over any third party element types
+        $thirdPartyElementTypes = craft()->fruitLinkIt->getThirdPartyElementTypes();
 
-        foreach ($thirdPartyElementSettings as $thirdPartyHandle => $thirdPartyElementSettingArray) {
-            $data = false;
-            if ($value) {
-              $data = $value->getThirdPartyTypeData($thirdPartyHandle);
-            }
+        foreach ($thirdPartyElementTypes as $elementTypeHandle => $elementTypeConfig) {
+          $data = false;
+          if ($value) {
+            $data = $value->getThirdPartyElementData($elementTypeHandle);
+          }
 
-            $elementSelectSettings[$thirdPartyHandle] = array(
-              'elementType' => new ElementTypeVariable( craft()->elements->getElementType($thirdPartyElementSettingArray['elementType']) ),
-              'elements' => $value && $data && $data['element'] ? array($data['element']) : null,
-              'sources' => $settings[$thirdPartyHandle.'Sources'],
-              'criteria' => array(
-                  'status' => null,
-              ),
-              'sourceElementId' => ( isset($this->element->id) ? $this->element->id : null ),
-              'limit' => 1,
-              'addButtonLabel' => Craft::t($settings[$key.'SelectionLabel']),
-              'storageKey' => 'field.'.$this->model->id
-            );
-
+          $elementSelectSettings[$elementTypeHandle] = array(
+            'elementType' => new ElementTypeVariable( craft()->elements->getElementType($elementTypeConfig['elementType']) ),
+            'elements' => $value && $data && $data['element'] ? array($data['element']) : null,
+            'sources' => $settings[$elementTypeHandle.'Sources'],
+            'criteria' => array(
+                'status' => null,
+            ),
+            'sourceElementId' => ( isset($this->element->id) ? $this->element->id : null ),
+            'limit' => 1,
+            'addButtonLabel' => Craft::t($settings[$elementTypeHandle.'SelectionLabel']),
+            'storageKey' => 'field.'.$this->model->id
+          );
         }
 
         // Render Field
@@ -226,12 +225,13 @@ class FruitLinkItFieldType extends BaseFieldType
       'product' => Craft::t('Product'),
 		);
 
-    // Give plugins a chance to add their own types
-    $allPluginLinkItTypes = craft()->plugins->call('linkit_registerElementTypes');
-
-    foreach ($allPluginLinkItTypes as $pluginLinkItType)
+    // Give plugins a chance to add their own element types
+    $thirdPartyElementTypes = craft()->fruitLinkIt->getThirdPartyElementTypes();
+    foreach ($thirdPartyElementTypes as $elementTypeHandle => $elementTypeConfig)
     {
-      $types = array_merge($types, $pluginLinkItType);
+      $types = array_merge($types, array(
+        $elementTypeHandle => $elementTypeConfig['name']
+      ));
     }
 
     return $types;

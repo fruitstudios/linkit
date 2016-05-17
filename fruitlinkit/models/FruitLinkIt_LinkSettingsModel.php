@@ -35,11 +35,11 @@ class FruitLinkIt_LinkSettingsModel extends BaseModel
             'productSelectionLabel' => array(AttributeType::String, 'default' => Craft::t('Select a product')),
         );
 
-        $thirdPartyElementSettings = craft()->fruitLinkIt->getThirdPartyElementSettings();
-        foreach ($thirdPartyElementSettings as $key => $thirdPartyElementSetting) {
+        $thirdPartyElementTypes = craft()->fruitLinkIt->getThirdPartyElementTypes();
+        foreach ($thirdPartyElementTypes as $elementTypeHandle => $elementTypeConfig) {
           $attributes = array_merge($attributes, array(
-            $key.'Sources' => AttributeType::Mixed,
-            $key.'SelectionLabel' => array(AttributeType::String, 'default' => $thirdPartyElementSetting['selectionLabelDefault'])
+            $elementTypeHandle.'Sources' => AttributeType::Mixed,
+            $elementTypeHandle.'SelectionLabel' => array(AttributeType::String, 'default' => $elementTypeConfig['selectionLabelDefault'])
           ));
         }
 
@@ -72,12 +72,12 @@ class FruitLinkIt_LinkSettingsModel extends BaseModel
                 $this->addError('productSources', Craft::t('Please select at least 1 product source.'));
             }
 
-            // Handle third party plugin settings errors
-            $thirdPartyElementSettings = craft()->fruitLinkIt->getThirdPartyElementSettings();
-            foreach ($thirdPartyElementSettings as $thirdPartyHandle => $thirdPartyElementSettingArray) {
-              if( in_array($thirdPartyHandle, $this->types) && $this[$thirdPartyHandle.'Sources'] == '')
+            // Handle third party element errors
+            $thirdPartyElementTypes = craft()->fruitLinkIt->getThirdPartyElementTypes();
+            foreach ($thirdPartyElementTypes as $elementTypeHandle => $elementTypeConfig) {
+              if( in_array($elementTypeHandle, $this->types) && $this[$elementTypeHandle.'Sources'] == '')
               {
-                  $this->addError($thirdPartyHandle.'Sources', Craft::t('Please select at least 1 '.strtolower($thirdPartyElementSettingArray['name']).' source.'));
+                  $this->addError($elementTypeHandle.'Sources', Craft::t('Please select at least 1 '.strtolower($elementTypeConfig['name']).' source.'));
               }
             }
 
