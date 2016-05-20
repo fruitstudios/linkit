@@ -16,7 +16,7 @@ class FruitLinkIt_LinkSettingsModel extends BaseModel
 {
     protected function defineAttributes()
     {
-        return array(
+        $attributes = array(
             'types' => AttributeType::Mixed,
             'allowCustomText' => AttributeType::Bool,
             'defaultText' => AttributeType::String,
@@ -34,6 +34,16 @@ class FruitLinkIt_LinkSettingsModel extends BaseModel
             'productSources' => AttributeType::Mixed,
             'productSelectionLabel' => array(AttributeType::String, 'default' => Craft::t('Select a product')),
         );
+
+        $thirdPartyElementTypes = craft()->fruitLinkIt->getThirdPartyElementTypes();
+        foreach ($thirdPartyElementTypes as $elementTypeHandle => $elementTypeConfig) {
+          $attributes = array_merge($attributes, array(
+            $elementTypeHandle.'Sources' => AttributeType::Mixed,
+            $elementTypeHandle.'SelectionLabel' => array(AttributeType::String, 'default' => $elementTypeConfig['selectionLabelDefault'])
+          ));
+        }
+
+        return $attributes;
     }
 
     public function validate($attributes = null, $clearErrors = true)
@@ -61,6 +71,16 @@ class FruitLinkIt_LinkSettingsModel extends BaseModel
             {
                 $this->addError('productSources', Craft::t('Please select at least 1 product source.'));
             }
+
+            // Handle third party element errors
+            $thirdPartyElementTypes = craft()->fruitLinkIt->getThirdPartyElementTypes();
+            foreach ($thirdPartyElementTypes as $elementTypeHandle => $elementTypeConfig) {
+              if( in_array($elementTypeHandle, $this->types) && $this[$elementTypeHandle.'Sources'] == '')
+              {
+                  $this->addError($elementTypeHandle.'Sources', Craft::t('Please select at least 1 '.strtolower($elementTypeConfig['name']).' source.'));
+              }
+            }
+
         }
         else
         {

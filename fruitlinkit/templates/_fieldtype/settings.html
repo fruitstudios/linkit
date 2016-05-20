@@ -145,3 +145,25 @@
 		instructions: "No entry sources exist yet."|t
 	}) }} #}
 {% endif %}
+
+{% for elementTypeHandle, elementTypeConfig in thirdPartyElementTypes %}
+	<hr>
+
+	{{ forms.checkboxSelectField({
+		label: elementTypeConfig.name|t,
+		instructions: "Which sources do you want to select "~elementTypeConfig.pluralName|lower~" from?"|t,
+		id: elementTypeHandle~'Sources',
+		name: elementTypeHandle~'Sources',
+		options: elementTypeConfig.sources,
+		values: settings[elementTypeHandle~'Sources'],
+		errors: settings.getErrors(elementTypeHandle~'Sources'),
+	})}}
+
+	{{ forms.textField({
+		label: elementTypeConfig.name~" Selection Label"|t,
+		instructions: "Enter the text you want to appear on the "~elementTypeConfig.name|lower~" selection input."|t,
+		name: elementTypeHandle~'SelectionLabel',
+		value: settings[elementTypeHandle~'SelectionLabel']
+	}) }}
+
+{% endfor %}

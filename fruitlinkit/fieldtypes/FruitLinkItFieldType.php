@@ -13,14 +13,15 @@ class FruitLinkItFieldType extends BaseFieldType
         return array(AttributeType::Mixed);
     }
 
-	public function getSettingsHtml()
-	{
-		return craft()->templates->render('fruitlinkit/_fieldtype/settings', array(
-			'settings'             		=> $this->getSettings(),
-            'types' 			   		=> $this->_getAvaiableLinkItTypes(),
-            'elementSources'            => craft()->fruitLinkIt->getLinkItElementSources(),
-		));
-	}
+    public function getSettingsHtml()
+    {
+        return craft()->templates->render('fruitlinkit/_fieldtype/settings', array(
+          'settings'                  => $this->getSettings(),
+          'types'                     => $this->_getAvaiableLinkItTypes(),
+          'elementSources'            => craft()->fruitLinkIt->getLinkItElementSources(),
+          'thirdPartyElementTypes'    => craft()->fruitLinkIt->getThirdPartyElementTypes(),
+        ));
+    }
 
     public function getInputHtml($name, $value)
     {
@@ -103,13 +104,36 @@ class FruitLinkItFieldType extends BaseFieldType
             )
         );
 
-		// Render Field
-    	return craft()->templates->render('fruitlinkit/_fieldtype/input', array(
+        // Go over any third party element types
+        $thirdPartyElementTypes = craft()->fruitLinkIt->getThirdPartyElementTypes();
+
+        foreach ($thirdPartyElementTypes as $elementTypeHandle => $elementTypeConfig) {
+          $data = false;
+          if ($value) {
+            $data = $value->getThirdPartyElementData($elementTypeHandle);
+          }
+
+          $elementSelectSettings[$elementTypeHandle] = array(
+            'elementType' => new ElementTypeVariable( craft()->elements->getElementType($elementTypeConfig['elementType']) ),
+            'elements' => $value && $data && $data['element'] ? array($data['element']) : null,
+            'sources' => $settings[$elementTypeHandle.'Sources'],
+            'criteria' => array(
+                'status' => null,
+            ),
+            'sourceElementId' => ( isset($this->element->id) ? $this->element->id : null ),
+            'limit' => 1,
+            'addButtonLabel' => Craft::t($settings[$elementTypeHandle.'SelectionLabel']),
+            'storageKey' => 'field.'.$this->model->id
+          );
+        }
+
+        // Render Field
+        return craft()->templates->render('fruitlinkit/_fieldtype/input', array(
             'name'  => $name,
             'value' => $value,
             'settings' => $settings,
             'types' => $types,
-            'elementSelectSettings' => $elementSelectSettings,
+            'elementSelectSettings' => $elementSelectSettings
         ));
     }
 
@@ -191,7 +215,7 @@ class FruitLinkItFieldType extends BaseFieldType
 
     private function _getLinkItTypes()
 	{
-		return array(
+		$types = array(
 			'email' => Craft::t('Email Address'),
 			'tel' => Craft::t('Phone Number'),
 			'custom' => Craft::t('Custom URL'),
@@ -200,6 +224,17 @@ class FruitLinkItFieldType extends BaseFieldType
 			'asset' => Craft::t('Asset'),
       'product' => Craft::t('Product'),
 		);
+
+    // Give plugins a chance to add their own element types
+    $thirdPartyElementTypes = craft()->fruitLinkIt->getThirdPartyElementTypes();
+    foreach ($thirdPartyElementTypes as $elementTypeHandle => $elementTypeConfig)
+    {
+      $types = array_merge($types, array(
+        $elementTypeHandle => $elementTypeConfig['name']
+      ));
+    }
+
+    return $types;
 	}
 
     private function _valueToModel($value, $settings = false)

@@ -18,6 +18,7 @@ class FruitLinkIt_LinkModel extends BaseModel
     private $_asset;
     private $_category;
     private $_product;
+    private $_thirdPartyTypes;
 
     protected function defineAttributes()
     {
@@ -117,6 +118,14 @@ class FruitLinkIt_LinkModel extends BaseModel
             case('email'):
                 $url = 'mailto:'.$this->value;
                 break;
+            default:
+                // Let third party elements handle their own urls
+                $data = $this->getThirdPartyElementData($this->type);
+                if (isset($data['url']))
+                {
+                  $url = $data['url'];
+                }
+                break;
         }
         return $url;
     }
@@ -166,7 +175,16 @@ class FruitLinkIt_LinkModel extends BaseModel
                 }
                 break;
             default:
-                $text = $this->value;
+                // Let third party elements handle their own text value if they want
+                $data = $this->getThirdPartyElementData($this->type);
+                if (isset($data['text']))
+                {
+                  $text = $data['text'];
+                }
+                else
+                {
+                  $text = $this->value;
+                }
                 break;
 
         }
@@ -271,6 +289,32 @@ class FruitLinkIt_LinkModel extends BaseModel
         return $this->_product;
     }
 
+    public function getThirdPartyElementData($type)
+    {
+        if(!isset($this->_thirdPartyTypes[$type]) || !$this->_thirdPartyTypes[$type])
+        {
+            $id = is_array($this->value) ? $this->value[0] : false;
+
+            if ($id)
+            {
+
+              // Allow plugins to define their own url and text data
+              $allPluginElements = craft()->plugins->call('linkit_getElementData', array($type, $id));
+
+              foreach ($allPluginElements as $pluginElement)
+              {
+                  if ($pluginElement)
+                  {
+                      $this->_thirdPartyTypes[$type] = $pluginElement;
+                  }
+              }
+
+            }
+
+        }
+        return isset($this->_thirdPartyTypes[$type]) ? $this->_thirdPartyTypes[$type] : null;
+    }
+
     public function validate($attributes = null, $clearErrors = true)
     {
         switch($this->type)
@@ -324,6 +368,21 @@ class FruitLinkIt_LinkModel extends BaseModel
                     $this->addError('value', Craft::t('Please select a product.'));
                 }
                 break;
+
+            default:
+              if($this->value == '')
+              {
+                $thirdPartyElementTypes = craft()->fruitLinkIt->getThirdPartyElementTypes();
+                if (isset($thirdPartyElementTypes[$this->type]) && isset($thirdPartyElementTypes[$this->type]['emptyInputErrorMessage']))
+                {
+                  $this->addError('value', $thirdPartyElementTypes[$this->type]['emptyInputErrorMessage']);
+                }
+                else
+                {
+                  $this->addError('value', Craft::t('Please select something.'));
+                }
+              }
+              break;
         }
 
         return !$this->hasErrors();

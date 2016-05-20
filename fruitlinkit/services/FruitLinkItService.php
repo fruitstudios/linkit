@@ -35,6 +35,20 @@ class FruitLinkItService extends BaseApplicationComponent
         );
     }
 
+    // Gives plugins a chance to add their own element types
+    public function getThirdPartyElementTypes()
+    {
+      $elementTypesConfig = array();
+      $allPluginElementTypes = craft()->plugins->call('linkit_registerElementTypes');
+
+      foreach ($allPluginElementTypes as $pluginElementType)
+      {
+        $elementTypesConfig = array_merge($elementTypesConfig, $pluginElementType);
+      }
+
+      return $elementTypesConfig;
+    }
+
     private function _getElementSourcesWithUrls($type)
     {
         $elementType = craft()->elements->getElementType($type);

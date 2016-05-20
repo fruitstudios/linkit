@@ -102,6 +102,101 @@ or specific element types
     {{ linkItField.custom }} use {{ linkItField.url }} instead.
     {{ linkItField.tel }} use {{ linkItField.url }} instead.
 
+
+### Hooks
+
+There are two hooks that allow plugins to add their own Element Types to Link It:
+
+#### `linkit_registerElementTypes`
+
+Registers the ElementType(s) with LinkIt and provides all the data needed for the field settings.
+
+It should return an array of element types you want to register and should be in the following format:
+
+```php
+/**
+ * @return array
+ */
+public function linkit_registerElementTypes()
+{
+
+  return array(
+   'my_element' => array(
+     'name'                   => Craft::t('My Element'),
+     'pluralName'             => Craft::t('My Elements'),
+     'selectionLabelDefault'  => Craft::t('Select an element'),
+     'emptyInputErrorMessage' => Craft::t('Please select an element'),
+     'elementType'            => 'MyPlugin_MyElement',
+     'sources' => array(
+       array(
+         'label' => Craft::t('All of my elements'),
+         'value' => '*'
+       ),
+       array(
+         'label' => Craft::t('Element source 1'),
+         'value' => 'myElementGroup:1'
+       ),
+       array(
+         'label' => Craft::t('Element source 2'),
+         'value' => 'myElementGroup:2'
+       )
+     )
+   )
+  ),
+  'my_other_element' => array(
+    ...
+  );
+
+}
+```
+
+#### `linkit_getElementData`
+
+Fetches the element data for a given `$type` and `$id`:
+
+```php
+/**
+ * @param  string $type
+ * @param  int    $id
+ * @return array|false
+ */
+public function linkit_getElementData($type, $id)
+{
+
+  // Return false if there is no `$type` or `$id` set
+  if (!$type || !$id) {
+    return false;
+  }
+
+  switch ($type) {
+    case 'my_element':
+      $myElement = craft()->myPlugin_myElements->getMyElementById($id);
+
+      if ($myElement) {
+        return array(
+          'url'     => $myElement->getUrl(),
+          'text'    => $myElement->title,
+          'element' => $myElement
+        );
+      } else {
+        // There was no element, so be sure to return false
+        return false;
+      }
+      break;
+
+    case 'my_other_element':
+      ...
+      break;
+
+    // We don’t want to return anything for unsupported types
+    default:
+      return false;
+      break;
+  }
+
+}
+```
+
 ## FruitLinkIt Roadmap
 
 Some things to do, and ideas for potential features:
