@@ -208,6 +208,10 @@ Some things to do, and ideas for potential features:
 
 ## FruitLinkIt Changelog
 
+### 2.3.4
+
+* Added: Allow plugins to add their own Element Types (Thanks to Josh Angell)
+
 ### 2.3.3
 
 * Added: Support For Commerce Products (Thanks to Isaac Gray)
