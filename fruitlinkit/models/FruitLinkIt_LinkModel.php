@@ -62,7 +62,10 @@ class FruitLinkIt_LinkModel extends BaseModel
             {
                 foreach ($attributes as $attr => $value)
                 {
-                    $htmlLink .= ' '.$attr.'="'.$value.'"';
+                    if($value !== false)
+                    {
+                        $htmlLink .= ' '.$attr.'="'.$value.'"';
+                    }
                 }
             }
 
