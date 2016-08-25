@@ -21,6 +21,10 @@
 	float:left;
 }
 
+.fruitlinkit-options .input .elementselect .element {
+	margin: 0;
+}
 .fruitlinkit-settings {
 	clear:both;
+	padding-top: 10px;
 }
