@@ -19,6 +19,7 @@
 
 			this.$optionsHolder = this.$field.find('.fruitlinkit-options');
 			this.$settingsHolder = this.$field.find('.fruitlinkit-settings');
+			this.$settingsHolderEMailExtras = this.$field.find('.fruitlinkit-settings-emailextras');
 			this.$options = this.$optionsHolder.find('.fruitlinkit-option');
 
 			this.addListener(this.$typeSelect, 'change', 'onChangeType');
@@ -28,6 +29,15 @@
 		{
 			var $select = $(e.currentTarget);
 			this.type = $select.val();
+
+			if(this.type === 'email')
+			{
+				this.$settingsHolderEMailExtras.show();
+			}
+			else
+			{
+				this.$settingsHolderEMailExtras.hide();
+			}
 
 			if(this.type === '')
 			{

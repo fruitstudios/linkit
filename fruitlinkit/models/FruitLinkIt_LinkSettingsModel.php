@@ -21,6 +21,7 @@ class FruitLinkIt_LinkSettingsModel extends BaseModel
             'allowCustomText' => AttributeType::Bool,
             'defaultText' => AttributeType::String,
             'allowTarget' => AttributeType::Bool,
+            'emailExtras' => AttributeType::Mixed,
 
             'entrySources' => AttributeType::Mixed,
             'entrySelectionLabel' => array(AttributeType::String, 'default' => Craft::t('Select an entry')),

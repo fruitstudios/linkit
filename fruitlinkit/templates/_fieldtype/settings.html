@@ -13,6 +13,18 @@
 
 <hr>
 
+{{ forms.checkboxSelectField({
+	label: "E-Mail Settings"|t,
+	instructions: "Allow custom subject or body"|t,
+	id: 'emailExtras',
+	name: 'emailExtras',
+	options: { 'subject': 'Allow custom subject'|t, 'body': 'Allow custom body'|t },
+	values: settings.emailExtras,
+	showAllOption: false,
+})}}
+
+<hr>
+
 {{ forms.textField({
 	label: "Default Link Text"|t,
 	instructions: "Set a default value for this links text value, can be overridden if custom link text option is selected."|t,

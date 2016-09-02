@@ -24,3 +24,10 @@
 .fruitlinkit-settings {
 	clear:both;
 }
+
+.fruitlinkit-settings-emailextras {
+	margin: 10px 0 10px 0;
+	clear: both;
+	float: left;
+	width: 100%;
+}

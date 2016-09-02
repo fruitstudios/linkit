@@ -27,6 +27,8 @@ class FruitLinkIt_LinkModel extends BaseModel
             'value' => array(AttributeType::String, 'default' => false),
             'defaultText' => array(AttributeType::String, 'default' => false),
             'customText' => array(AttributeType::String, 'default' => false),
+            'customEMailSubject' => array(AttributeType::String, 'default' => false),
+            'customEMailBody' => array(AttributeType::String, 'default' => false),
             'target' => array(AttributeType::String, 'default' => false),
         );
     }
@@ -117,6 +119,10 @@ class FruitLinkIt_LinkModel extends BaseModel
                 break;
             case('email'):
                 $url = 'mailto:'.$this->value;
+                $extra = array_filter(['subject' => $this->customEMailSubject, 'body' => $this->customEMailBody]);
+                if (count($extra) > 0) {
+                    $url .= '?' . http_build_query($extra);
+                }
                 break;
             default:
                 // Let third party elements handle their own urls

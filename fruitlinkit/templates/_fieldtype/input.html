@@ -117,6 +117,36 @@
 		{% endfor %}
 	</div>
 
+	{# E-Mail Subject & Body #}
+	{% if settings.emailExtras|length > 0 and types.email is defined %}
+	<div class="fruitlinkit-settings-emailextras{{ type == '' ? ' hidden' }}">
+		{% if 'subject' in settings.emailExtras %}
+		<div class="fruit-field-column fruitlinkit-text">
+			{{ forms.textField({
+			label: 'E-Mail Subject'|t,
+			id: name~'customEMailSubject',
+			class: name~'customEMailSubject',
+			name: name~'[customEMailSubject]',
+			value: value.customEMailSubject is defined and value.customEMailSubject ? value.customEMailSubject
+			}) }}
+		</div>
+		{% endif %}
+
+		{% if 'body' in settings.emailExtras %}
+		<div class="fruit-field-column fruitlinkit-text">
+			{{ forms.textareaField({
+			label: 'E-Mail Body'|t,
+			rows: 5,
+			id: name~'customEMailBody',
+			class: name~'customEMailBody',
+			name: name~'[customEMailBody]',
+			value: value.customEMailBody is defined and value.customEMailBody ? value.customEMailBody
+			}) }}
+		</div>
+		{% endif %}
+	</div>
+	{% endif %}
+
 	{# Text & Target #}
 	{% if settings.allowCustomText or settings.allowTarget %}
 	<div class="fruitlinkit-settings{{ type == '' ? ' hidden' }}">
