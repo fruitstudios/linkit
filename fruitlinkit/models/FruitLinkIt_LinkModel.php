@@ -121,7 +121,7 @@ class FruitLinkIt_LinkModel extends BaseModel
                 $url = 'mailto:'.$this->value;
                 $extra = array_filter(['subject' => $this->customEMailSubject, 'body' => $this->customEMailBody]);
                 if (count($extra) > 0) {
-                    $url .= '?' . http_build_query($extra);
+                    $url .= '?' . http_build_query($extra, null, '&', PHP_QUERY_RFC3986);
                 }
                 break;
             default:
