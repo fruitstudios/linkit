@@ -335,7 +335,7 @@ class FruitLinkIt_LinkModel extends BaseModel
                 break;
 
             case('custom'):
-                if(!filter_var($this->value, FILTER_VALIDATE_URL) && $this->value == '#')
+                if($this->value == '' || !filter_var($this->value, FILTER_VALIDATE_URL) && $this->value[0] != '#')
                 {
                     $this->addError('value', Craft::t('Please enter a valid url.'));
                 }
