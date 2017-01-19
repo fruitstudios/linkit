@@ -138,6 +138,7 @@
 		{% if settings.allowTarget %}
 
 			<div class="fruit-field-column fruitlinkit-target">
+				<input type="hidden" name="{{ name }}[target]" value="_self" />
 				{{ forms.checkboxField({
 					id: name~'Target',
 					class: name~'Target',
