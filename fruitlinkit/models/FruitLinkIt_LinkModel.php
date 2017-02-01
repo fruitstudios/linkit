@@ -206,6 +206,9 @@ class FruitLinkIt_LinkModel extends BaseModel
             case('category'):
                 $element = $this->category;
                 break;
+            case('product'):
+                $element = $this->product;
+                break;
             default:
                 $element = false;
         }
