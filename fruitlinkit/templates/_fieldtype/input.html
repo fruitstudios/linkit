@@ -120,10 +120,10 @@
 	{# Text & Target #}
 	{% if settings.allowCustomText or settings.allowTarget %}
 	<div class="fruitlinkit-settings{{ type == '' ? ' hidden' }}">
-
 		{% if settings.allowCustomText %}
 
 			<div class="fruit-field-column fruitlinkit-text">
+				<div></div>
 				{{ forms.textField({
 					id: name~'CustomText',
 					class: name~'CustomText',
