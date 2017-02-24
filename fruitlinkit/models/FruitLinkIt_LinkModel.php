@@ -27,6 +27,7 @@ class FruitLinkIt_LinkModel extends BaseModel
             'value' => array(AttributeType::String, 'default' => false),
             'defaultText' => array(AttributeType::String, 'default' => false),
             'customText' => array(AttributeType::String, 'default' => false),
+            'link_layer'=>array(AttributeType::String, 'default' =>false),
             'target' => array(AttributeType::String, 'default' => false),
         );
     }
