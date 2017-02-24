@@ -132,6 +132,16 @@
 					value: value.customText is defined and value.customText ? value.customText
 				}) }}
 			</div>
+			<div class='instructions'><p style="color:#8f98a3;font-size:11px">dataLayer: ex:{  'event': 'yourEvent' , 'eventCategory': 'yourCategory' , 'eventAction': 'yourAction' , 'eventLabel': 'yourLabel' }</p></div>
+			<div class="linkit-text">
+				{{ forms.textField({
+				id: name~'link_layer',
+				class: name~'CustomText',
+				name: name~'[link_layer]',
+				placeholder: "{  'event': 'yourEvent' , 'eventCategory': 'yourCategory' , 'eventAction': 'yourAction' , 'eventLabel': 'yourLabel' }",
+				value: value.link_layer is defined ? value.link_layer
+				}) }}
+			</div>
 
 		{% endif %}
 
