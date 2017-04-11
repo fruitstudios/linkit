@@ -41,6 +41,16 @@ class FruitLinkIt_LinkModel extends BaseModel
     {
         $url = $this->getUrl();
         $text = $this->getText();
+        $innerHTML = false;
+        
+        if(is_array($attributes) && array_key_exists('innerHTML', $attributes))
+        {
+            $innerHTML = $attributes['innerHTML'];
+            unset($attributes['innerHTML']);
+        } else {
+            $innerHTML = $text;
+        }
+        
         if($url && $text)
         {
             // Open  Link
@@ -67,7 +77,7 @@ class FruitLinkIt_LinkModel extends BaseModel
             }
 
             // Close Up Link
-            $htmlLink .= '>'.$text.'</a>';
+            $htmlLink .= '>'.$innerHTML.'</a>';
 
             // Get Raw
             return TemplateHelper::getRaw($htmlLink);
