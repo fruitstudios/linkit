@@ -60,6 +60,7 @@ class FruitLinkItFieldType extends BaseFieldType
                 'sources' => $settings->entrySources,
                 'criteria' => array(
                     'status' => null,
+		    'locale' => $this->getTargetLocale(),
                 ),
                 'sourceElementId' => ( isset($this->element->id) ? $this->element->id : null ),
                 'limit' => 1,
@@ -185,7 +186,19 @@ class FruitLinkItFieldType extends BaseFieldType
     {
         return new FruitLinkIt_LinkSettingsModel();
     }
+	
+    protected function getTargetLocale()
+    {
+        if (craft()->isLocalized())
+        {
+            if (isset($this->element))
+            {
+                return $this->element->locale;
+            }
+        }
 
+        return craft()->getLanguage();
+    }
 
     // Private Methods
     // =========================================================================
