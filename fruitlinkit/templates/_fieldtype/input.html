@@ -33,7 +33,7 @@
 				id: name~'Email',
 				class: name~'Email',
 				name: name~'[email]',
-				placeholder: 'Email Address',
+				placeholder: 'Email Address'|t,
 				value: type == 'email' ? value.value
 			}) }}
 		</div>
@@ -45,7 +45,7 @@
 				id: name~'Tel',
 				class: name~'Tel',
 				name: name~'[tel]',
-				placeholder: 'Telephone Number',
+				placeholder: 'Telephone Number'|t,
 				value: type == 'tel' ? value.value
 			}) }}
 		</div>
@@ -57,7 +57,7 @@
 				id: name~'Custom',
 				class: name~'Custom',
 				name: name~'[custom]',
-				placeholder: 'Custom URL',
+				placeholder: 'Custom URL'|t,
 				value: type == 'custom' ? value.value
 			}) }}
 		</div>
@@ -120,15 +120,15 @@
 	{# Text & Target #}
 	{% if settings.allowCustomText or settings.allowTarget %}
 	<div class="fruitlinkit-settings{{ type == '' ? ' hidden' }}">
-
 		{% if settings.allowCustomText %}
 
 			<div class="fruit-field-column fruitlinkit-text">
+				<div></div>
 				{{ forms.textField({
 					id: name~'CustomText',
 					class: name~'CustomText',
 					name: name~'[customText]',
-					placeholder: settings.defaultText == '' ? 'Custom Link Text' : settings.defaultText,
+					placeholder: settings.defaultText == '' ? 'Custom Link Text'|t : settings.defaultText,
 					value: value.customText is defined and value.customText ? value.customText
 				}) }}
 			</div>
@@ -138,12 +138,13 @@
 		{% if settings.allowTarget %}
 
 			<div class="fruit-field-column fruitlinkit-target">
+				<input type="hidden" name="{{ name }}[target]" value="_self" />
 				{{ forms.checkboxField({
 					id: name~'Target',
 					class: name~'Target',
 					name: name~'[target]',
 					value: '_blank',
-					label: 'Open link in new window?',
+					label: 'Open link in new window?'|t,
 					checked: value.target is defined and value.target == '_blank' ? true : null
 				}) }}
 			</div>
