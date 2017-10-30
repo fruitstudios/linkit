@@ -53,7 +53,7 @@ class FruitLinkItFieldType extends BaseFieldType
     	}
 
         // current selected CP locale
-        $locale = isset($this->element->locale) ? $this->element->locale : craft.locale;
+        $locale = isset($this->element->locale) ? $this->element->locale : craft()->language;
 
         // Element Select Options
         $elementSelectSettings = array(
