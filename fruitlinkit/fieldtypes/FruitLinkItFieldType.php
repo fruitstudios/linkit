@@ -52,6 +52,9 @@ class FruitLinkItFieldType extends BaseFieldType
 	    	$types = $types + $availableTypes;
     	}
 
+        // current selected CP locale
+        $locale = isset($this->element->locale) ? $this->element->locale : craft()->language;
+
         // Element Select Options
         $elementSelectSettings = array(
             'entry' => array(
@@ -60,6 +63,7 @@ class FruitLinkItFieldType extends BaseFieldType
                 'sources' => $settings->entrySources,
                 'criteria' => array(
                     'status' => null,
+                    'locale' => $locale,
                 ),
                 'sourceElementId' => ( isset($this->element->id) ? $this->element->id : null ),
                 'limit' => 1,
@@ -72,6 +76,7 @@ class FruitLinkItFieldType extends BaseFieldType
                 'sources' => $settings->assetSources,
                 'criteria' => array(
                     'status' => null,
+                    'locale' => $locale,
                 ),
                 'sourceElementId' => ( isset($this->element->id) ? $this->element->id : null ),
                 'limit' => 1,
@@ -222,7 +227,7 @@ class FruitLinkItFieldType extends BaseFieldType
 			'entry' => Craft::t('Entry'),
 			'category' => Craft::t('Category'),
 			'asset' => Craft::t('Asset'),
-      'product' => Craft::t('Product'),
+            'product' => Craft::t('Product'),
 		);
 
     // Give plugins a chance to add their own element types
@@ -252,6 +257,7 @@ class FruitLinkItFieldType extends BaseFieldType
             $link->customText = isset($value['customText']) ? $value['customText'] : false;
             $link->defaultText = $settings->defaultText;
             $link->target = isset($value['target']) ? ($value['target'] ? '_blank' : false) : false;
+            $link->locale = isset($this->element->locale) ? $this->element->locale : craft.locale;
 
 
             return $link;

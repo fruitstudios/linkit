@@ -28,6 +28,7 @@ class FruitLinkIt_LinkModel extends BaseModel
             'defaultText' => array(AttributeType::String, 'default' => false),
             'customText' => array(AttributeType::String, 'default' => false),
             'target' => array(AttributeType::String, 'default' => false),
+            'locale' => array(AttributeType::String),
         );
     }
 
@@ -223,9 +224,9 @@ class FruitLinkIt_LinkModel extends BaseModel
         if(!$this->_entry)
         {
             $id = is_array($this->value) ? $this->value[0] : false;
-            if( $id && $entry = craft()->entries->getEntryById($id) )
+            $locale = isset($this->locale) ? $this->locale : null;
+            if( $id && $entry =  craft()->entries->getEntryById($id, $locale) )
             {
-
                 $this->_entry = $entry;
             }
         }
@@ -243,7 +244,8 @@ class FruitLinkIt_LinkModel extends BaseModel
         if(!$this->_asset)
         {
             $id = is_array($this->value) ? $this->value[0] : false;
-            if( $id && $asset = craft()->assets->getFileById($id) )
+            $locale = isset($this->locale) ? $this->locale : null;
+            if( $id && $asset = craft()->assets->getFileById($id, $locale) )
             {
                 $this->_asset = $asset;
             }
@@ -289,31 +291,6 @@ class FruitLinkIt_LinkModel extends BaseModel
         return $this->_product;
     }
 
-    public function getThirdPartyElementData($type)
-    {
-        if(!isset($this->_thirdPartyTypes[$type]) || !$this->_thirdPartyTypes[$type])
-        {
-            $id = is_array($this->value) ? $this->value[0] : false;
-
-            if ($id)
-            {
-
-              // Allow plugins to define their own url and text data
-              $allPluginElements = craft()->plugins->call('linkit_getElementData', array($type, $id));
-
-              foreach ($allPluginElements as $pluginElement)
-              {
-                  if ($pluginElement)
-                  {
-                      $this->_thirdPartyTypes[$type] = $pluginElement;
-                  }
-              }
-
-            }
-
-        }
-        return isset($this->_thirdPartyTypes[$type]) ? $this->_thirdPartyTypes[$type] : null;
-    }
 
     public function validate($attributes = null, $clearErrors = true)
     {
