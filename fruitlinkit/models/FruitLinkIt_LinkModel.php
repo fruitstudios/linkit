@@ -291,6 +291,32 @@ class FruitLinkIt_LinkModel extends BaseModel
         return $this->_product;
     }
 
+    public function getThirdPartyElementData($type)
+    {
+        if(!isset($this->_thirdPartyTypes[$type]) || !$this->_thirdPartyTypes[$type])
+        {
+            $id = is_array($this->value) ? $this->value[0] : false;
+
+            if ($id)
+            {
+
+              // Allow plugins to define their own url and text data
+              $allPluginElements = craft()->plugins->call('linkit_getElementData', array($type, $id));
+
+              foreach ($allPluginElements as $pluginElement)
+              {
+                  if ($pluginElement)
+                  {
+                      $this->_thirdPartyTypes[$type] = $pluginElement;
+                  }
+              }
+
+            }
+
+        }
+        return isset($this->_thirdPartyTypes[$type]) ? $this->_thirdPartyTypes[$type] : null;
+    }
+
 
     public function validate($attributes = null, $clearErrors = true)
     {
