@@ -56,6 +56,10 @@ class FruitLinkIt_LinkModel extends BaseModel
             if( ( !is_array($attributes) || !array_key_exists('title', $attributes) ) && $this->target )
             {
                 $htmlLink .= ' target="'.$this->target.'"';
+                
+                if ($this->target == '_blank') {
+                    $htmlLink .= ' rel="noopener"';
+                }
             }
 
             // Add Attributes
