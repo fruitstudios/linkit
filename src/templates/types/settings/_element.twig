@@ -1,0 +1,24 @@
+{% import "_includes/forms" as forms %}
+
+{% include 'linkit/types/settings/_default' %}
+
+{{ forms.checkboxSelectField({
+    label: "Sources"|t('linkit'),
+    instructions: "Which sources do you want to select {type} from?"|t('linkit', { type: type.defaultLabel()|lower }),
+    id: type.type|id~'-sources',
+    name: 'sources',
+    options: type.sourceOptions,
+    values: type.sources,
+    errors: type.getErrors('sources'),
+    showAllOption: true,
+}) }}
+
+{{ forms.textField({
+    label: "Selection Label"|t('linkit'),
+    instructions: "Enter the text you want to appear on the {type} selection input."|t('linkit', { type: type.defaultLabel()|lower }),
+    id: type.type|id~'-customSelectionLabel',
+    name: 'customSelectionLabel',
+    value: type.customSelectionLabel,
+    placeholder: type.defaultSelectionLabel,
+    errors: type.getErrors('customSelectionLabel')
+}) }}

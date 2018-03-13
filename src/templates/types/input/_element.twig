@@ -1,0 +1,12 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.elementSelect({
+    id: name ~ link.type|id ~ '-value',
+    name: name ~ '[values]['~ link.type ~']',
+    elementType: link.elementType(),
+    selectionLabel: link.selectionLabel,
+    sources: link.sources == '*' ? null : link.sources,
+    limit: 1,
+    elements: (currentLink.element ?? false) ? [currentLink.element] : [],
+}) }}
+

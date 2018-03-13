@@ -1,0 +1,78 @@
+{% import "_includes/forms" as forms %}
+
+<div class="linkit">
+
+	{% if field.enabledLinkTypes|length %}
+
+		{% set singleLinkType = field.enabledLinkTypes|length == 1 %}
+
+		<div class="flex">
+
+			{% if not singleLinkType %}
+		        <div>
+		        	{{ forms.selectField({
+		        	    id: id ~ '-type',
+		        	    name: name ~ '[type]',
+		        	    fieldClass: 'linkit--type',
+		        	    options: field.enabledlinkTypesAsOptions,
+		        	    value: currentLink.type ?? '',
+		        	    errors: field.getErrors('type') ?? null,
+		        	    toggle: true,
+		        	}) }}
+		        </div>
+		    {% endif %}
+
+	        <div class="flex-grow">
+	        	{% for linkType in field.enabledlinkTypes %}
+
+	        	    {% set isCurrentType = currentLink and currentLink.type == linkType.type %}
+
+	        	    <div id="{{ linkType.type|id }}" class="linkit--{{ linkType.defaultLabel|lower }} {{ not singleLinkType and not isCurrentType ? 'hidden' }}">
+	        	    	{{ linkType.getInputHtml(name, (isCurrentType ? currentLink : null))|raw }}
+	        	    </div>
+
+	        	{% endfor %}
+	        </div>
+
+	    </div>
+
+		{% if field.allowCustomText or field.allowTarget %}
+
+			<div id="{{ id }}-any" class="flex linkit--settings {{ not singleLinkType and (not currentLink or currentLink.type == '') ? 'hidden' }}">
+
+				{% if field.allowCustomText %}
+					<div class="flex-grow">
+						{{ forms.textField({
+							id: name~'CustomText',
+							name: name~'[customText]',
+							fieldClass: 'linkit--customText',
+							placeholder: field.defaultText ? field.defaultText : 'Link Text'|t('linkit'),
+							value: currentLink.customText ?? ''
+						}) }}
+					</div>
+				{% endif %}
+
+				{% if field.allowTarget %}
+					<div>
+						{{ forms.checkboxField({
+							id: name~'Target',
+							name: name~'[target]',
+							fieldClass: 'linkit--target',
+							value: true,
+							label: 'Open link in new window?'|t('linkit'),
+							checked: currentLink.target ?? null
+						}) }}
+					</div>
+				{% endif %}
+
+			</div>
+
+		{% endif %}
+
+	{% else %}
+
+		<p class="warning">{{ 'There are no enabled link types for this field'|t('linkit') }}
+
+	{% endif %}
+
+</div>

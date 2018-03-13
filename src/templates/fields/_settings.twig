@@ -1,0 +1,67 @@
+{% import "_includes/forms" as forms %}
+
+<div class="linkit--fieldSettings">
+
+	{{ forms.textField({
+		label: "Select Link Text"|t('linkit'),
+		instructions: "Set the first item to be displayed in the link select."|t('linkit'),
+		name: 'selectLinkText',
+		placeholder: field.selectLinkText,
+		placeholder: field.defaultSelectLinkText,
+		errors: field.getErrors('selectLinkText'),
+	}) }}
+
+	{{ forms.field({
+		label: "Link Types"|t('linkit'),
+		instructions: "Select and configure the link types you like to make available"|t('linkit'),
+		errors: field.getErrors('enabledLinkTypes'),
+	}) }}
+
+	{% for linkType in field.availableLinkTypes %}
+
+		{% set name = 'types['~linkType.type~']' %}
+		{% set isEnabled = field.types[linkType.type].enabled ?? false %}
+
+		{{ forms.checkboxField({
+			id: linkType.type|id,
+			name: name~'[enabled]',
+			label: linkType.defaultLabel(),
+			value: true,
+			toggle: linkType.hasSettings ? '#' ~ linkType.type|id ~ '-settings' : null,
+			checked: isEnabled,
+		}) }}
+
+		{% if linkType.hasSettings %}
+			<div id="{{ linkType.type|id }}-settings" class="{{ not isEnabled ? 'hidden' }}">
+				{% namespace name %}
+					{{ linkType.getSettingsHtml()|raw }}
+				{% endnamespace %}
+			</div>
+		{% endif %}
+
+	{% endfor %}
+
+	<hr>
+
+	{{ forms.textField({
+		label: "Default Link Text"|t('linkit'),
+		instructions: "Set a default text value for this link, can be overridden if custom link text option is selected."|t('linkit'),
+		name: 'defaultText',
+		value: field.defaultText,
+		errors: field.getErrors('defaultText'),
+	}) }}
+
+	{{ forms.checkboxField({
+		label: "Allow custom link text"|t('linkit'),
+		name: 'allowCustomText',
+		checked: field.allowCustomText
+	}) }}
+
+	{{ forms.checkboxField({
+		label: "Show option to open link in new window"|t('linkit'),
+		name: 'allowTarget',
+		checked: field.allowTarget
+	}) }}
+
+</div>
+

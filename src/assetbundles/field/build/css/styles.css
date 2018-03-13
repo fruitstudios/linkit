@@ -1,0 +1,22 @@
+/* Type Select */
+.linkit--type {
+  margin-bottom: 12px;
+}
+
+/* Type Specific Fields
+.linkit--phone { margin-bottom: 12px; }
+.linkit--url { margin-bottom: 12px; }
+.linkit--email { margin-bottom: 12px; }
+.linkit--entry { margin-bottom: 12px; }
+.linkit--category { margin-bottom: 12px; }
+.linkit--user { margin-bottom: 12px; }
+.linkit--asset { margin-bottom: 12px; }
+.linkit--product { margin-bottom: 12px; }
+*/
+
+/* Default Fields */
+.linkit--settings {}
+.linkit--customText {
+  margin-bottom: 12px;
+}
+.linkit--target {}
