@@ -1,5 +1,5 @@
 {
-	"name": "shornuk/linkit",
+	"name": "fruitstudios/linkit",
 	"description": "One link field to rule them all.",
 	"type": "craft-plugin",
 	"version": "1.0.0",
@@ -14,9 +14,9 @@
 	],
 	"support": {
 		"email": "hi@fruitstudios.co.uk",
-		"issues": "https://github.com/shornuk/linkit/issues/issues?state=open",
-		"source": "https://github.com/shornuk/linkit/issues",
-		"docs": "https://github.com/shornuk/linkit/issues"
+		"issues": "https://github.com/fruitstudios/linkit/issues/issues?state=open",
+		"source": "https://github.com/fruitstudios/linkit/issues",
+		"docs": "https://github.com/fruitstudios/linkit/issues"
 	},
 	"license": "MIT",
 	"authors": [

@@ -2,7 +2,9 @@
 
 One link field to rule them all...
 
-![Screenshot](resources/img/plugin-logo.png)
+## Requirements
+
+DO NOT INSTALL.
 
 ## Requirements
 
