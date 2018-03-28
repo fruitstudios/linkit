@@ -2,6 +2,9 @@
 
 One link field to replace them all, a multi-purpose link fieldtype for Craft CMS.
 
+## On Craft 3
+
+Linkit for Craft 3 is now available in the Plugin Store
 
 ## UPGRADING Pre 2.3.0???
 
