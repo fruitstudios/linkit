@@ -4,9 +4,9 @@ One link field to replace them all, a multi-purpose link fieldtype for Craft CMS
 
 ## On Craft 3
 
-Linkit for Craft 3 is now available in the Plugin Store
+Linkit for Craft 3 is now available in the Plugin Store ([Linkit on GitHub](https://github.com/fruitstudios/craft-linkit))
 
-## UPGRADING Pre 2.3.0???
+## Upgrading Pre 2.3.0?
 
 See upgrade details below.
 
