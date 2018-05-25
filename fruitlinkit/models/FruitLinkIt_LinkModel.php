@@ -264,7 +264,8 @@ class FruitLinkIt_LinkModel extends BaseModel
         if(!$this->_category)
         {
             $id = is_array($this->value) ? $this->value[0] : false;
-            if( $id && $category = craft()->categories->getCategoryById($id) )
+            $locale = isset($this->locale) ? $this->locale : null;
+            if( $id && $category = craft()->categories->getCategoryById($id, $locale) )
             {
                 $this->_category = $category;
             }
@@ -282,7 +283,8 @@ class FruitLinkIt_LinkModel extends BaseModel
         if(!$this->_product)
         {
             $id = is_array($this->value) ? $this->value[0] : false;
-            if( $id && $product = craft()->commerce_products->getProductById($id) )
+            $locale = isset($this->locale) ? $this->locale : null;
+            if( $id && $product = craft()->commerce_products->getProductById($id, $locale) )
             {
 
                 $this->_product = $product;
