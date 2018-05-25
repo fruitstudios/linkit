@@ -89,6 +89,7 @@ class FruitLinkItFieldType extends BaseFieldType
                 'sources' => $settings->categorySources,
                 'criteria' => array(
                     'status' => null,
+                    'locale' => $locale,
                 ),
                 'sourceElementId' => ( isset($this->element->id) ? $this->element->id : null ),
                 'limit' => 1,
@@ -101,6 +102,7 @@ class FruitLinkItFieldType extends BaseFieldType
                 'sources' => $settings->productSources,
                 'criteria' => array(
                     'status' => null,
+                    'locale' => $locale,
                 ),
                 'sourceElementId' => ( isset($this->element->id) ? $this->element->id : null ),
                 'limit' => 1,
