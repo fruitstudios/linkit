@@ -1,7 +1,7 @@
 {% import "_includes/forms" as forms %}
 
-{% set singleType = types|length == 1 ? types[0] : null %}
-{% set type = singleType ? singleType : ( value.type is defined and value.type ? value.type : null) %}
+{% set singleType = types|keys|filter|length == 1 ? types|keys|filter|first : null %}
+{% set type = singleType ? singleType : (value.type is defined and value.type ? value.type : null) %}
 
 <div id="{{ name }}" class="fruit-field fruitlinkit">
 
@@ -34,7 +34,7 @@
 				class: name~'Email',
 				name: name~'[email]',
 				placeholder: 'Email Address',
-				value: type == 'email' ? value.value
+				value: type == 'email' ? value.value|default('')
 			}) }}
 		</div>
 		{% endif %}
@@ -46,7 +46,7 @@
 				class: name~'Tel',
 				name: name~'[tel]',
 				placeholder: 'Telephone Number',
-				value: type == 'tel' ? value.value
+				value: type == 'tel' ? value.value|default('')
 			}) }}
 		</div>
 		{% endif %}
@@ -58,7 +58,7 @@
 				class: name~'Custom',
 				name: name~'[custom]',
 				placeholder: 'Custom URL',
-				value: type == 'custom' ? value.value
+				value: type == 'custom' ? value.value|default('')
 			}) }}
 		</div>
 		{% endif %}
@@ -103,18 +103,6 @@
 		</div>
 		{% endif %}
 
-		{# Custom types #}
-		{% for key, val in types if key not in ['','email','custom','tel','entry','asset','category','product'] %}
-		{% if elementSelectSettings[key] is defined %}
-		<div class="fruitlinkit-option fruitlinkit-{{ key }}{{ type != key ? ' hidden' }}">
-			{{ forms.elementSelectField({
-				id: name~key,
-				class: name~key,
-				name: name~'['~key~']',
-			}|merge(elementSelectSettings[key])) }}
-		</div>
-		{% endif %}
-		{% endfor %}
 	</div>
 
 	{# Text & Target #}
