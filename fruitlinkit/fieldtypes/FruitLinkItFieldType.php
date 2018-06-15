@@ -44,7 +44,11 @@ class FruitLinkItFieldType extends BaseFieldType
     	{
 			foreach($settings['types'] as $type)
 			{
-				$types[$type] = $availableTypes[$type];
+				// Ensure the type is still available
+				if(array_key_exists($type, $availableTypes))
+				{
+					$types[$type] = $availableTypes[$type];
+				}
 			}
     	}
     	else
